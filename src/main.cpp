@@ -19,7 +19,16 @@ int main() {
       std::cout << input.substr(5) << std::endl;
     }else if(input.substr(0,input.find(" ")) == "type"){
       std::string path_env = std::getenv("PATH");
-      std::string path = path_env.substr(0,path_env.find(":")) + '/' + input.substr(input.find(" ")+1);
+      std::stringstream ss_path(path_env);
+      std::string path; //= path_env.substr(0,path_env.find(":")) + '/' + input.substr(input.find(" ")+1);
+
+      while(std::getline(ss_path,path, ':')){
+        std::string full_path = path + '/' + input.substr(input.find(" ")+1;
+        if(!access(path.c_str(),X_OK)){
+          std::cout << input.substr(input.find(" ")+1) << " is " << path << std::endl;
+          break;
+        }
+      }
       if(input.substr(input.find(" ")+1,4) == "echo"){
         std::cout << "echo is a shell builtin" << std::endl;
       }else if(input.substr(input.find(" ")+1,4) == "exit"){
@@ -30,8 +39,8 @@ int main() {
         std::cout << input.substr(input.find(" ")+1) << " is " << path << std::endl;
       }else{
         std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
-        std::cout << path << std::endl;
-        std::cout << path_env << std::endl;
+        //std::cout << path << std::endl;
+        //std::cout << path_env << std::endl;
       }
     }else{
       std::cout << input << ": command not found" << std::endl;
