@@ -22,21 +22,24 @@ int main() {
       std::stringstream ss_path(path_env);
       std::string path; //= path_env.substr(0,path_env.find(":")) + '/' + input.substr(input.find(" ")+1);
       bool pathExists = false;
-      while(std::getline(ss_path,path, ':')){
-        std::string full_path = path + '/' + input.substr(input.find(" ")+1);
-        if(!access(full_path.c_str(),X_OK)){
-          std::cout << input.substr(input.find(" ")+1) << " is " << full_path << std::endl;
-          pathExists = true;
-          break;
-        }
-      }
+
       if(input.substr(input.find(" ")+1,4) == "echo"){
         std::cout << "echo is a shell builtin" << std::endl;
       }else if(input.substr(input.find(" ")+1,4) == "exit"){
         std::cout << "exit is a shell builtin" << std::endl;
       }else if(input.substr(input.find(" ")+1,4) == "type"){
         std::cout << "type is a shell builtin" << std::endl;
-      }else if(!pathExists){
+      }else{
+        while(std::getline(ss_path,path, ':')){
+          std::string full_path = path + '/' + input.substr(input.find(" ")+1);
+          if(!access(full_path.c_str(),X_OK)){
+            std::cout << input.substr(input.find(" ")+1) << " is " << full_path << std::endl;
+            pathExists = true;
+            break;
+          }
+        }
+      } 
+      if(!pathExists){
         std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
         //std::cout << path << std::endl;
         //std::cout << path_env << std::endl;
