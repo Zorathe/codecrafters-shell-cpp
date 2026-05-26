@@ -16,6 +16,7 @@ int main() {
     }
     if(input.substr(0,input.find(" ")) == "echo"){
       std::cout << input.substr(5,input.size()-4) << std::endl;
+      break;
     }
     std::cout << input << ": command not found" << std::endl;
   }
