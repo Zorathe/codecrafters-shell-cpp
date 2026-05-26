@@ -48,6 +48,3 @@ int main() {
   }
 
 }
-
-// check if command is built iin
-// if it is print 
