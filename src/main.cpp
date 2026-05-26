@@ -44,6 +44,7 @@ int main() {
         //std::cout << path << std::endl;
         //std::cout << path_env << std::endl;
       }
+      pathExists = false;
     }else{
       std::cout << input << ": command not found" << std::endl;
     }
