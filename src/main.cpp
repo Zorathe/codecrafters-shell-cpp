@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <unistd.h>
-
+#include <sstream>
 int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
