@@ -17,7 +17,7 @@ int main() {
     if(input.substr(0,input.find(" ")) == "echo"){
       std::cout << input.substr(5) << std::endl;
     }else if(input.substr(0,input.find(" ")) == "type"){
-      std::string path_env std::getenv("PATH");
+      std::string path_env = std::getenv("PATH");
       std::string path = path_env + '/' + input.substr(input.find(" ")+1);
       if(input.substr(input.find(" ")+1,4) == "echo"){
         std::cout << "echo is a shell builtin" << std::endl;
