@@ -26,6 +26,8 @@ int main() {
         std::string full_path = path + '/' + input.substr(input.find(" ")+1);
         if(!access(path.c_str(),X_OK)){
           std::cout << input.substr(input.find(" ")+1) << " is " << path << std::endl;
+          std::cout << path << std::endl;
+          std::cout << path_env << std::endl;
           break;
         }
       }
