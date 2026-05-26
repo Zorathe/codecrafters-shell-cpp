@@ -17,7 +17,7 @@ int main() {
     if(input.substr(0,input.find(" ")) == "echo"){
       std::cout << input.substr(5) << std::endl;
     }else if(input.substr(0,input.find(" ")) == "type"){
-      if(input.substr(input.find(" "),4 == "echo")){
+      if(input.substr(input.find(" "),4) == "echo")){
         std::cout << "echo is a shell builtin" << std::endl;
       }else if(input.substr(input.find(" "),4) == "exit")){
         std::cout << "exit is a shell builtin" << std::endl;
