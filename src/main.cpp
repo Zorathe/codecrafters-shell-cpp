@@ -22,7 +22,7 @@ int main() {
       }else if(input.substr(input.find(" "),4) == "exit"){
         std::cout << "exit is a shell builtin" << std::endl;
       }else{
-        std::cout << input.substr(input.find(" ")) << ": not found" << std::endl;
+        std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
       }
     }else{
       std::cout << input << ": command not found" << std::endl;
