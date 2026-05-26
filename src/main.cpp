@@ -14,6 +14,9 @@ int main() {
     if(input == "exit"){
       break;
     }
+    if(if input.substr(0,input.find(" ")) == "echo"){
+      cout << input.substr(4,input.end()) << endl;
+    }
     std::cout << input << ": command not found" << std::endl;
   }
 
