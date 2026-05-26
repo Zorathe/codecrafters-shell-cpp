@@ -21,6 +21,8 @@ int main() {
         std::cout << "echo is a shell builtin" << std::endl;
       }else if(input.substr(input.find(" ")+1,4) == "exit"){
         std::cout << "exit is a shell builtin" << std::endl;
+      }else if(input.substr(input.find(" ")+1,4) == "type"){
+        std::cout << "type is a shell builtin" << std::endl;
       }else{
         std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
       }
