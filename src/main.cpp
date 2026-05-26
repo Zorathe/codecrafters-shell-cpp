@@ -30,6 +30,7 @@ int main() {
         std::cout << input.substr(input.find(" ")+1) << " is " << path << std::endl;
       }else{
         std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
+        std::cout << path << endl;
       }
     }else{
       std::cout << input << ": command not found" << std::endl;
