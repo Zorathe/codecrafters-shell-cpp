@@ -23,7 +23,7 @@ int main() {
       std::string path; //= path_env.substr(0,path_env.find(":")) + '/' + input.substr(input.find(" ")+1);
 
       while(std::getline(ss_path,path, ':')){
-        std::string full_path = path + '/' + input.substr(input.find(" ")+1;
+        std::string full_path = path + '/' + input.substr(input.find(" ")+1);
         if(!access(path.c_str(),X_OK)){
           std::cout << input.substr(input.find(" ")+1) << " is " << path << std::endl;
           break;
