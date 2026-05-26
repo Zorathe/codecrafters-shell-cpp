@@ -25,10 +25,13 @@ int main() {
 
       if(input.substr(input.find(" ")+1,4) == "echo"){
         std::cout << "echo is a shell builtin" << std::endl;
+        pathExists = true;
       }else if(input.substr(input.find(" ")+1,4) == "exit"){
         std::cout << "exit is a shell builtin" << std::endl;
+        pathExists = true;
       }else if(input.substr(input.find(" ")+1,4) == "type"){
         std::cout << "type is a shell builtin" << std::endl;
+        pathExists = true;
       }else{
         while(std::getline(ss_path,path, ':')){
           std::string full_path = path + '/' + input.substr(input.find(" ")+1);
@@ -41,10 +44,7 @@ int main() {
       } 
       if(!pathExists){
         std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
-        //std::cout << path << std::endl;
-        //std::cout << path_env << std::endl;
       }
-      pathExists = false;
     }else{
       std::cout << input << ": command not found" << std::endl;
     }
