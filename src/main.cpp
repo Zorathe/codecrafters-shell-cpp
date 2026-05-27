@@ -52,7 +52,7 @@ int main() {
       }
     }else{
       std::cout << input << ": command not found" << std::endl;
-      std::cout << input.substr(0,10)  == "custom_exe"<< "not working this out" << std::endl;
+      std::cout << input.substr(0,10)  == "custom_exe" << "not working this out" << std::endl;
     }
   }
 
