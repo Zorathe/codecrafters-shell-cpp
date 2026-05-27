@@ -17,8 +17,8 @@ int main() {
     }
     if(input.substr(0,10) == "custom_exe"){
       int argCount = 0;
-      std::string args;
-      while(std::getline(input,args, ' ')){
+      std::stringstream args;
+      while(std::getline(args,input, ' ')){
         argCount++;
       }
       std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
