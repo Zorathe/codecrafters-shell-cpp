@@ -64,7 +64,7 @@ int main() {
         }
         aruCount++;
       }
-      execvp((input.find(" ")+1).c_str(), aexec);
+      std::system(input.substr(input.find(" ")+1).c_str());
 
     
     }else{
