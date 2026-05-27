@@ -47,7 +47,7 @@ int main() {
       std::string arg;
       while(std::getline(args,arg, ' ')){
         argCount++;
-        std::cout << input << std::endl;
+        //std::cout << input << std::endl;
       }
       std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
     
