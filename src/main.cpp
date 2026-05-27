@@ -15,14 +15,7 @@ int main() {
     if(input == "exit"){
       break;
     }
-    if(input.substr(0,10) == "custom_exe"){
-      int argCount = 0;
-      std::stringstream args;
-      while(std::getline(args,input, ' ')){
-        argCount++;
-      }
-      std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
-    }
+
     if(input.substr(0,input.find(" ")) == "echo"){
       std::cout << input.substr(5) << std::endl;
     }else if(input.substr(0,input.find(" ")) == "type"){
@@ -34,6 +27,13 @@ int main() {
       if(input.substr(input.find(" ")+1,4) == "echo"  || input.substr(input.find(" ")+1,4) == "exit" || input.substr(input.find(" ")+1,4) == "type"){
         std::cout << input.substr(input.find(" ")+1,4) << " is a shell builtin" << std::endl;
         pathExists = true;
+      }else if(input.substr(0,10) == "custom_exe"){
+        int argCount = 0;
+        std::stringstream args;
+        while(std::getline(args,input, ' ')){
+          argCount++;
+        }
+        std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
       }else{
         while(std::getline(ss_path,path, ':')){
           std::string full_path = path + '/' + input.substr(input.find(" ")+1);
