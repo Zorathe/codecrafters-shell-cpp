@@ -41,14 +41,14 @@ int main() {
         std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
      //   std::cout << input.substr(0,10) << "check this out" << std::endl;
       }
-    // }else if(input.substr(0,10) == "custom_exe"){
-    //   int argCount = 0;
-    //   std::stringstream args(input);
-    //   std::string arg;
-    //   while(std::getline(args,arg, ' ')){
-    //     argCount++;
-    //     //std::cout << input << std::endl;
-    //   }
+    }else if(input.substr(0,10) == "custom_exe"){
+      int argCount = 0;
+      std::stringstream args(input);
+      std::string arg;
+      while(std::getline(args,arg, ' ')){
+        argCount++;
+        //std::cout << input << std::endl;
+      }
       // std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
       // std::stringstream ars(input);
       // std::string aru;
@@ -65,7 +65,7 @@ int main() {
       //   aruCount++;
       // }
       std::system(input.c_str());
-      //std::cout << "Program worked" << std::endl;
+      std::cout << "Program worked" << std::endl;
     
     }else{
       std::cout << input << ": command not found" << std::endl;
