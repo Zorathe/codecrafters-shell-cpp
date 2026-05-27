@@ -27,7 +27,6 @@ int main() {
       if(input.substr(input.find(" ")+1,4) == "echo"  || input.substr(input.find(" ")+1,4) == "exit" || input.substr(input.find(" ")+1,4) == "type"){
         std::cout << input.substr(input.find(" ")+1,4) << " is a shell builtin" << std::endl;
         pathExists = true;
-      }
       }else{
         while(std::getline(ss_path,path, ':')){
           std::string full_path = path + '/' + input.substr(input.find(" ")+1);
