@@ -2,6 +2,8 @@
 #include <string>
 #include <unistd.h>
 #include <sstream>
+#include <filesystem>
+
 int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
