@@ -39,41 +39,13 @@ int main() {
       } 
       if(!pathExists){
         std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
-     //   std::cout << input.substr(0,10) << "check this out" << std::endl;
       }
     }else if(input.substr(0,10) == "custom_exe"){
-      // int argCount = 0;
-      // std::stringstream args(input);
-      // std::string arg;
-      // while(std::getline(args,arg, ' ')){
-      //   argCount++;
-      //   //std::cout << input << std::endl;
-      // }
-      // std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
-      // std::stringstream ars(input);
-      // std::string aru;
-      // std::string aexec[argCount];
-
-      // int aruCount = 0;
-      // while(std::getline(ars,aru, ' ')){
-      //   if(!aruCount){
-      //     std::cout << "Arg #0 (program name): " << aru << std::endl;  
-      //   }else{
-      //     std::cout << "Arg #" << aruCount << ": " << aru << std::endl;
-      //     aexec[aruCount-1] = aru;
-      //   }
-      //   aruCount++;
-      // }
       std::system(input.c_str());
-      //std::cout << "Program worked" << std::endl;
     
     }else{
       std::cout << input << ": command not found" << std::endl;
-     // std::cout << (input.substr(0,10)  == "custom_exe") << "not working this out" << std::endl;
     }
   }
 
 }
-
-// determine if custom_exe is an executable in PATH
-// execute with three arguments: custom_exe, arg1, and arg2
