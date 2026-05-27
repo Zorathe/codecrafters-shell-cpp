@@ -21,7 +21,7 @@ int main() {
       while(std::getline(input,args," ")){
         argCount++;
       }
-      std::cout << "Program was passed " << argCount << " args (including program name)." std::endl;
+      std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
     }
     if(input.substr(0,input.find(" ")) == "echo"){
       std::cout << input.substr(5) << std::endl;
