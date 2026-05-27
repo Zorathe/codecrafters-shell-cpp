@@ -65,7 +65,7 @@ int main() {
       //   aruCount++;
       // }
       std::system(input.c_str());
-      std::cout << "Program worked" << std::endl;
+      //std::cout << "Program worked" << std::endl;
     
     }else{
       std::cout << input << ": command not found" << std::endl;
