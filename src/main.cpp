@@ -55,9 +55,9 @@ int main() {
       int aruCount = 0;
       while(std::getline(ars,aru, ' ')){
         if(!aruCount){
-          std::cout << "Arg #0 (program name): " << aru;  
+          std::cout << "Arg #0 (program name): " << aru << std::endl;  
         }else{
-          std::cout << "Arg #" << aruCount << aru;
+          std::cout << "Arg #" << aruCount << aru << std::endl;
         }
         aruCount++;
       }
