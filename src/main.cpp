@@ -50,6 +50,17 @@ int main() {
         //std::cout << input << std::endl;
       }
       std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
+      std::stringstream ars(input);
+      std::string aru;
+      int aruCount = 0;
+      while(std::getline(ars,aru, ' ')){
+        if(!aruCount){
+          std::cout << "Arg #0 (program name): " << aru;  
+        }else{
+          std::cout << "Arg #" << aruCount << aru;
+        }
+        aruCount++;
+      }
     
     }else{
       std::cout << input << ": command not found" << std::endl;
