@@ -43,8 +43,9 @@ int main() {
       }
     }else if(input.substr(0,10) == "custom_exe"){
       int argCount = 0;
-      std::stringstream args;
-      while(std::getline(args,input, ' ')){
+      std::stringstream args(input);
+      std::string arg;
+      while(std::getline(args,arg, ' ')){
         argCount++;
         std::cout << input << std::endl;
       }
