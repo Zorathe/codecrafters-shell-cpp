@@ -28,6 +28,7 @@ int main() {
         std::cout << input.substr(input.find(" ")+1,4) << " is a shell builtin" << std::endl;
         pathExists = true;
       }else if(input.substr(0,10) == "custom_exe"){
+        std::cout << "this worked" << std::endl;
         int argCount = 0;
         std::stringstream args;
         while(std::getline(args,input, ' ')){
