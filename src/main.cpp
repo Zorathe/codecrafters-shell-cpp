@@ -51,6 +51,7 @@ int main() {
       }
     }else{
       std::cout << input << ": command not found" << std::endl;
+      std::cout << input.substr(0,10) << "not working this out" << std::endl;
     }
   }
 
