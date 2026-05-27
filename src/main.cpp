@@ -49,7 +49,7 @@ int main() {
         argCount++;
       }
       std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
-      pathExists == true;
+    
     }else{
       std::cout << input << ": command not found" << std::endl;
       std::cout << (input.substr(0,10)  == "custom_exe") << "not working this out" << std::endl;
