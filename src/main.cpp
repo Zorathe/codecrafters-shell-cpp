@@ -52,15 +52,20 @@ int main() {
       std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
       std::stringstream ars(input);
       std::string aru;
+      char *aexec[argCount];
+
       int aruCount = 0;
       while(std::getline(ars,aru, ' ')){
         if(!aruCount){
           std::cout << "Arg #0 (program name): " << aru << std::endl;  
         }else{
           std::cout << "Arg #" << aruCount << ": " << aru << std::endl;
+          aexec[aruCount-1] = aru;
         }
         aruCount++;
       }
+      execvp(input.find(" ")+1, aexec);
+
     
     }else{
       std::cout << input << ": command not found" << std::endl;
