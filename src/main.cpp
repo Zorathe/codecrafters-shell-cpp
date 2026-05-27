@@ -52,7 +52,7 @@ int main() {
       std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
       std::stringstream ars(input);
       std::string aru;
-      char *aexec[argCount];
+      std::string aexec[argCount];
 
       int aruCount = 0;
       while(std::getline(ars,aru, ' ')){
