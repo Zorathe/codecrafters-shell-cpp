@@ -43,6 +43,9 @@ int main() {
     }else if(input.substr(0,10) == "custom_exe"){
       std::system(input.c_str());
     
+    }else if(input == "pwd"){
+      std::cout << std::filesystem::current_path().string() << std::endl;
+    
     }else{
       std::cout << input << ": command not found" << std::endl;
     }
