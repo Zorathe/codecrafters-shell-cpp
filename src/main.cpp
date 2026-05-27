@@ -26,7 +26,7 @@ int main() {
       std::string path; //= path_env.substr(0,path_env.find(":")) + '/' + input.substr(input.find(" ")+1);
       bool pathExists = false;
 
-      if(input.substr(input.find(" ")+1,4) == "echo"  || input.substr(input.find(" ")+1,4) == "exit" || input.substr(input.find(" ")+1,4) == "type"){
+      if(input.substr(input.find(" ")+1,4) == "echo"  || input.substr(input.find(" ")+1,4) == "exit" || input.substr(input.find(" ")+1,4) == "type" || input.substr(input.find(" ")+1,3) == "pwd" ){
         std::cout << input.substr(input.find(" ")+1,4) << " is a shell builtin" << std::endl;
         pathExists = true;
       }else{
