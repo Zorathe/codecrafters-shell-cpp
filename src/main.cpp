@@ -64,7 +64,7 @@ int main() {
         }
         aruCount++;
       }
-      std::system(input.substr(input.find(" ")+1).c_str());
+      std::system(input.c_str());
       std::cout << "Program worked" << std::endl;
     
     }else{
