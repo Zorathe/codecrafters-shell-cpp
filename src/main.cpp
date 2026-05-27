@@ -42,13 +42,13 @@ int main() {
      //   std::cout << input.substr(0,10) << "check this out" << std::endl;
       }
     }else if(input.substr(0,10) == "custom_exe"){
-      int argCount = 0;
-      std::stringstream args(input);
-      std::string arg;
-      while(std::getline(args,arg, ' ')){
-        argCount++;
-        //std::cout << input << std::endl;
-      }
+      // int argCount = 0;
+      // std::stringstream args(input);
+      // std::string arg;
+      // while(std::getline(args,arg, ' ')){
+      //   argCount++;
+      //   //std::cout << input << std::endl;
+      // }
       // std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
       // std::stringstream ars(input);
       // std::string aru;
