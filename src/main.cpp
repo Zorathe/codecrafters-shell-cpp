@@ -39,7 +39,7 @@ int main() {
       } 
       if(!pathExists){
         std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
-        std::cout << input.substr(0,10) << "check this out" << std::endl;
+     //   std::cout << input.substr(0,10) << "check this out" << std::endl;
       }
     }else if(input.substr(0,10) == "custom_exe"){
       std::cout << "this worked" << std::endl;
@@ -52,7 +52,7 @@ int main() {
     
     }else{
       std::cout << input << ": command not found" << std::endl;
-      std::cout << (input.substr(0,10)  == "custom_exe") << "not working this out" << std::endl;
+     // std::cout << (input.substr(0,10)  == "custom_exe") << "not working this out" << std::endl;
     }
   }
 
