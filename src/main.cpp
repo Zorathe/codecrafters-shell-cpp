@@ -47,7 +47,7 @@ int main() {
       } 
       if(!pathExists){
         std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
-        std::cout << input.substr(0,10) << "check this out" std::endl;
+        std::cout << input.substr(0,10) << "check this out" << std::endl;
       }
     }else{
       std::cout << input << ": command not found" << std::endl;
