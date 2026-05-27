@@ -46,6 +46,7 @@ int main() {
       std::stringstream args;
       while(std::getline(args,input, ' ')){
         argCount++;
+        std::cout << args << std::endl;
       }
       std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
     
