@@ -15,6 +15,14 @@ int main() {
     if(input == "exit"){
       break;
     }
+    if(input.substr(0,10) == "custom_exe"){
+      int argCount = 0;
+      std::string args;
+      while(std::getline(input,args," ")){
+        argCount++;
+      }
+      cout << "Program was passed " << argCount << " args (including program name).";
+    }
     if(input.substr(0,input.find(" ")) == "echo"){
       std::cout << input.substr(5) << std::endl;
     }else if(input.substr(0,input.find(" ")) == "type"){
@@ -23,14 +31,8 @@ int main() {
       std::string path; //= path_env.substr(0,path_env.find(":")) + '/' + input.substr(input.find(" ")+1);
       bool pathExists = false;
 
-      if(input.substr(input.find(" ")+1,4) == "echo"){
-        std::cout << "echo is a shell builtin" << std::endl;
-        pathExists = true;
-      }else if(input.substr(input.find(" ")+1,4) == "exit"){
-        std::cout << "exit is a shell builtin" << std::endl;
-        pathExists = true;
-      }else if(input.substr(input.find(" ")+1,4) == "type"){
-        std::cout << "type is a shell builtin" << std::endl;
+      if(input.substr(input.find(" ")+1,4) == "echo"  || input.substr(input.find(" ")+1,4) == "exit" || input.substr(input.find(" ")+1,4) == "type"){
+        std::cout << input.substr(input.find(" ")+1,4) << " is a shell builtin" << std::endl;
         pathExists = true;
       }else{
         while(std::getline(ss_path,path, ':')){
@@ -51,3 +53,6 @@ int main() {
   }
 
 }
+
+// determine if custom_exe is an executable in PATH
+// execute with three arguments: custom_exe, arg1, and arg2
