@@ -34,6 +34,7 @@ int main() {
           argCount++;
         }
         std::cout << "Program was passed " << argCount << " args (including program name)." << std::endl;
+        pathExists == true;
       }else{
         while(std::getline(ss_path,path, ':')){
           std::string full_path = path + '/' + input.substr(input.find(" ")+1);
