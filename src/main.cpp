@@ -42,7 +42,6 @@ int main() {
      //   std::cout << input.substr(0,10) << "check this out" << std::endl;
       }
     }else if(input.substr(0,10) == "custom_exe"){
-      std::cout << "this worked" << std::endl;
       int argCount = 0;
       std::stringstream args;
       while(std::getline(args,input, ' ')){
