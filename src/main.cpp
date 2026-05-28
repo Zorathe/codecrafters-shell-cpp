@@ -53,8 +53,8 @@ int main() {
     
     }else if(input.substr(0,2) == "cd"){
       if(input.substr(input.find(" ")+1) == "~"){
-
-        std::regex_replace(input.substr(input.find(" ")+1), std::regex("~"), std::getenv("HOME"));
+        std::string p = input.substr(input.find(" ")+1;
+        p = std::regex_replace(input.substr(input.find(" ")+1), std::regex("~"), std::getenv("HOME"));
         std::cout << "Home directory changed" << std::endl;
       }else if(chdir((input.substr(input.find(" ")+1)).c_str()) != 0){
         std::cout << "cd: " << input.substr(input.find(" ")+1) << ": No such file or directory"<< std::endl;    
