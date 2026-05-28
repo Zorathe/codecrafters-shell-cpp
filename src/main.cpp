@@ -52,11 +52,11 @@ int main() {
       std::cout << std::filesystem::current_path().string() << std::endl;
     
     }else if(input.substr(0,2) == "cd"){
-      if(input.substr(input.find(" ")+1) == "~"){
+      //if(input.substr(input.find(" ")+1) == "~"){
         std::string p = input.substr(input.find(" ")+1);
         p = std::regex_replace(input.substr(input.find(" ")+1), std::regex("~"), std::getenv("HOME"));
         //std::cout << "Home directory changed: " << p << std::endl;
-      }else if(chdir((input.substr(input.find(" ")+1)).c_str()) != 0){
+      /*}else */if(chdir((input.substr(input.find(" ")+1)).c_str()) != 0){
         std::cout << "cd: " << input.substr(input.find(" ")+1) << ": No such file or directory"<< std::endl;    
       }
     }else{
