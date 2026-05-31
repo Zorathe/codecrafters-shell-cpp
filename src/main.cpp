@@ -30,6 +30,7 @@ int main() {
       for(int i = 0; i < text.length();i++){
         if(text[i] == '\''){
           quoteOpened = !quoteOpened;
+          continue;
         }
         if(quoteOpened){
           line += text[i];
