@@ -28,14 +28,13 @@ int main() {
       std::string word = "";
       std::vector<std::string> line; 
       for(int i = 0; i < text.length();i++){
-        if(text[i] == '\''){
-          quoteOpened = !quoteOpened;
-        }
         if(!quoteOpened && text[i] == ' '){
           if(!word.empty()){
             line.push_back(word);
             word.clear();
           }
+        }else if(text[i] == '\''){
+          quoteOpened = !quoteOpened;
         }else{
             word += text[i];
         }
@@ -45,7 +44,7 @@ int main() {
       if(!word.empty()){
         line.push_back(word);
       }
-      std::cout << line.size() << std::endl;
+      //std::cout << line.size() << std::endl;
       for(std::string s: line){
         std::cout << s << std::endl;
       }
