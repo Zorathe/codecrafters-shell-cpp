@@ -41,6 +41,10 @@ int main() {
         }
     
       }
+
+      if(!word.empty()){
+        line.push_back(word);
+      }
       std::cout << line.size() << std::endl;
       for(std::string s: line){
         std::cout << s << std::endl;
