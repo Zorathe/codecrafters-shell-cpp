@@ -25,20 +25,21 @@ int main() {
       //implement echo with single quotes
       bool quoteOpened = false;
       std::string text = input.substr(5);
-      std::string line = "";
+      std::string word = "";
+      std::vector<std::string> line; 
       for(int i = 0; i < text.length();i++){
         if(text[i] == '\''){
           quoteOpened = !quoteOpened;
         }
-        if(text[i] != '\''){
-          if(quoteOpened){
-            line += text[i];
-          }else{
-            if(text[i] != ' '){
-              line += text[i];
-            }
+        if(!quoteOpened && text[i] == ' '){
+          if(!word.empty()){
+            line.push_back(word);
+            word.clear();
           }
+        }else{
+            line += text[i];
         }
+    
       }
       std::cout << line << std::endl;
     }else if(input.substr(0,input.find(" ")) == "type"){
