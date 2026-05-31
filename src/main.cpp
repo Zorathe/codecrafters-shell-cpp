@@ -23,6 +23,23 @@ int main() {
 
     if(input.substr(0,input.find(" ")) == "echo"){
       std::cout << input.substr(5) << std::endl;
+      //implement echo with single quotes
+      bool quoteOpened = false;
+      std::string text = input.substr(5);
+      std::string line = "";
+      for(int i = 0; i < text.length();i++){
+        if(text[i] == "\'"){
+          quoteOpened = !quoteOpened;
+        }
+        if(quoteOpened){
+          line += text[i];
+        }else{
+          if(text[i] != " "){
+            line += text[i];
+          }
+        }
+      }
+
     }else if(input.substr(0,input.find(" ")) == "type"){
       std::string path_env = std::getenv("PATH");
       std::stringstream ss_path(path_env);
@@ -52,11 +69,9 @@ int main() {
       std::cout << std::filesystem::current_path().string() << std::endl;
     
     }else if(input.substr(0,2) == "cd"){
-      //if(input.substr(input.find(" ")+1) == "~"){
         std::string p = input.substr(input.find(" ")+1);
         p = std::regex_replace(p, std::regex("~"), std::getenv("HOME"));
-        //std::cout << "Home directory changed: " << p << std::endl;
-      /*}else */if(chdir(p.c_str()) != 0){
+      if(chdir(p.c_str()) != 0){
         std::cout << "cd: " << input.substr(input.find(" ")+1) << ": No such file or directory"<< std::endl;    
       }
     }else{
