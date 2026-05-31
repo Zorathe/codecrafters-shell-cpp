@@ -37,7 +37,7 @@ int main() {
             word.clear();
           }
         }else{
-            line += text[i];
+            word += text[i];
         }
     
       }
