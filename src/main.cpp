@@ -22,7 +22,6 @@ int main() {
     }
 
     if(input.substr(0,input.find(" ")) == "echo"){
-      std::cout << input.substr(5) << std::endl;
       //implement echo with single quotes
       bool quoteOpened = false;
       std::string text = input.substr(5);
@@ -32,7 +31,7 @@ int main() {
           quoteOpened = !quoteOpened;
         }
         if(text[i] != '\''){
-          if(quoteOpened ){
+          if(quoteOpened){
             line += text[i];
           }else{
             if(text[i] != ' '){
@@ -40,6 +39,7 @@ int main() {
             }
           }
         }
+      std::cout << line << std::endl;
 
       }
 
