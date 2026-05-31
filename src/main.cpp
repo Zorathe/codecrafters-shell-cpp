@@ -28,13 +28,13 @@ int main() {
       std::string text = input.substr(5);
       std::string line = "";
       for(int i = 0; i < text.length();i++){
-        if(text[i] == "\'"){
+        if(text[i] == '\''){
           quoteOpened = !quoteOpened;
         }
         if(quoteOpened){
           line += text[i];
         }else{
-          if(text[i] != " "){
+          if(text[i] != ' '){
             line += text[i];
           }
         }
