@@ -46,7 +46,7 @@ int main() {
       }
       //std::cout << line.size() << std::endl;
       for(std::string s: line){
-        std::cout << s << std::endl;
+        std::cout << s << " ";
       }
     }else if(input.substr(0,input.find(" ")) == "type"){
       std::string path_env = std::getenv("PATH");
