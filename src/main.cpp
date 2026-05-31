@@ -48,6 +48,7 @@ int main() {
       for(std::string s: line){
         std::cout << s << " ";
       }
+      std::cout << std::endl;
     }else if(input.substr(0,input.find(" ")) == "type"){
       std::string path_env = std::getenv("PATH");
       std::stringstream ss_path(path_env);
