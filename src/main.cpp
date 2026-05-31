@@ -41,6 +41,7 @@ int main() {
         }
     
       }
+      std::cout << line.size() << std::endl;
       for(std::string s: line){
         std::cout << s << std::endl;
       }
