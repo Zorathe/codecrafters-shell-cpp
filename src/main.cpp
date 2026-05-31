@@ -30,15 +30,17 @@ int main() {
       for(int i = 0; i < text.length();i++){
         if(text[i] == '\''){
           quoteOpened = !quoteOpened;
-          continue;
         }
-        if(quoteOpened){
-          line += text[i];
-        }else{
-          if(text[i] != ' '){
+        if(text[i] != '\''){
+          if(quoteOpened ){
             line += text[i];
+          }else{
+            if(text[i] != ' '){
+              line += text[i];
+            }
           }
         }
+
       }
 
     }else if(input.substr(0,input.find(" ")) == "type"){
