@@ -21,6 +21,7 @@ int main() {
       break;
     }
     enum State {NORMAL, SINGLE, DOUBLE};
+    State state = NORMAL;
     if(input.substr(0,input.find(" ")) == "echo"){
       //implement echo with single quotes
       bool quoteOpened = false;
