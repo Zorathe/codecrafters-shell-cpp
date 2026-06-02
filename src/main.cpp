@@ -20,7 +20,7 @@ int main() {
     if(input == "exit"){
       break;
     }
-    enum State {NORMAL, SINGLE, DOUBLE}
+    enum State {NORMAL, SINGLE, DOUBLE};
     if(input.substr(0,input.find(" ")) == "echo"){
       //implement echo with single quotes
       bool quoteOpened = false;
