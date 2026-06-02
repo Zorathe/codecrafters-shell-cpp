@@ -12,7 +12,7 @@ int main() {
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
-  // TODO: Uncomment the code below to pass the first stage
+  
   while(true){
     std::cout << "$ ";
     std::string input;
@@ -33,7 +33,7 @@ int main() {
             line.push_back(word);
             word.clear();
           }
-        }else if(text[i] == '\''){
+        }else if(text[i] == '\'' || text[i] == '\"'){
           quoteOpened = !quoteOpened;
         }else{
             word += text[i];
@@ -44,7 +44,6 @@ int main() {
       if(!word.empty()){
         line.push_back(word);
       }
-      //std::cout << line.size() << std::endl;
       for(std::string s: line){
         std::cout << s << " ";
       }
