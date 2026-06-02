@@ -20,7 +20,7 @@ int main() {
     if(input == "exit"){
       break;
     }
-
+    enum State {NORMAL, SINGLE, DOUBLE}
     if(input.substr(0,input.find(" ")) == "echo"){
       //implement echo with single quotes
       bool quoteOpened = false;
@@ -28,13 +28,27 @@ int main() {
       std::string word = "";
       std::vector<std::string> line; 
       for(int i = 0; i < text.length();i++){
-        if(!quoteOpened && text[i] == ' '){
+        // if(!quoteOpened && text[i] == ' '){
+        //   if(!word.empty()){
+        //     line.push_back(word);
+        //     word.clear();
+        //   }
+        // }else if(text[i] == '\'' || text[i] == '\"'){
+        //   quoteOpened = !quoteOpened;
+        if(text[i] == '\\'){
+          if(i + 1 < text.size()){
+            word += text[i+1];
+            i++;
+          }
+        }else if(text[i] == '\'' && state != DOUBLE){
+          state = (state == SINGLE) ? NORMAL : SINGLE;
+        }else if(text[i] == '\"' && state != SINGLE){
+          state = (state == DOUBLE) ? NORMAL : DOUBLE;
+        }else if(text[i] == ' ' && state == NORMAL){
           if(!word.empty()){
             line.push_back(word);
             word.clear();
           }
-        }else if(text[i] == '\'' || text[i] == '\"'){
-          quoteOpened = !quoteOpened;
         }else{
             word += text[i];
         }
