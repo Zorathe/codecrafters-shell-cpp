@@ -29,14 +29,7 @@ int main() {
       std::string word = "";
       std::vector<std::string> line; 
       for(int i = 0; i < text.length();i++){
-        // if(!quoteOpened && text[i] == ' '){
-        //   if(!word.empty()){
-        //     line.push_back(word);
-        //     word.clear();
-        //   }
-        // }else if(text[i] == '\'' || text[i] == '\"'){
-        //   quoteOpened = !quoteOpened;
-        if(text[i] == '\\'){
+        if(state != SINGLE && text[i] == '\\'){
           if(i + 1 < text.size()){
             word += text[i+1];
             i++;
