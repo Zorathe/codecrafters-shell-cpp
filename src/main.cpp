@@ -127,7 +127,7 @@ int main() {
       if(chdir(p.c_str()) != 0){
         std::cout << "cd: " << input.substr(input.find(" ")+1) << ": No such file or directory"<< std::endl;    
       }
-    }/*else if(input.substr(0,3) == "cat" || input[0] == '\'' || input[0] == '\"'){
+    /*}else if(input.substr(0,3) == "cat" || input[0] == '\'' || input[0] == '\"'){
       std::system(command.c_str());
 
       //std::cout << "entered cat: " << input << std::endl;
