@@ -109,6 +109,8 @@ int main() {
       continue;
       //implement echo with single quotes
 
+    }else if(command == "exit"){
+      return 0;
     }else if(input.substr(0,input.find(" ")) == "type"){
       std::string path_env = std::getenv("PATH");
       std::stringstream ss_path(path_env);
