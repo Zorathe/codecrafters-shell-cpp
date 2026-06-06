@@ -86,7 +86,7 @@ int main() {
             std::cout << " ";
         }
         std::cout << "\n";  
-      }
+    
 
       // if(!word.empty()){
       //   line.push_back(word);
