@@ -32,7 +32,7 @@ std::vector<std::string> tokenize(const std::string &input){
     }else{
         word += input[i];
     }
-
+  }
 
   if(!word.empty()){
     line.push_back(word);
