@@ -26,14 +26,12 @@ int main() {
     while(getline(ss, part, ' ')){
       wordcollector.push_back(part);
     }
-    for(std::string s: wordcollector){
-      std::cout << s << std::endl;
-    }
     std::string file;
     bool writefile = false;
     int save = dup(1);
     if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>")){
     // implement the > operator
+      std::cout << "entered the matrix" << std::endl;
       writefile = true;
       file = wordcollector[wordcollector.size()-1];
       wordcollector.pop_back();
