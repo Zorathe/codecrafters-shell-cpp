@@ -31,7 +31,6 @@ int main() {
     int save = dup(1);
     if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>")){
     // implement the > operator
-      std::cout << "entered the matrix" << std::endl;
       writefile = true;
       file = wordcollector[wordcollector.size()-1];
       wordcollector.pop_back();
