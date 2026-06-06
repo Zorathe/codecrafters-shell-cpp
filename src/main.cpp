@@ -151,7 +151,7 @@ int main() {
         }
         execvp(c_args[0], c_args.data());
         std::cout << command << ": command not found\n";
-        perror("execvp")
+        perror("execvp");
         exit(1);
       }else{
         wait(nullptr);
