@@ -26,9 +26,9 @@ int main() {
     while(getline(ss, part, ' ')){
       wordcollector.push_back(part);
     }
-    // for(std::string s: wordcollector){
-    //   std::cout << s << std::endl;
-    // }
+    for(std::string s: wordcollector){
+      std::cout << s << std::endl;
+    }
     std::string file;
     bool writefile = false;
     int save = dup(1);
