@@ -7,6 +7,45 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 
+std::vector<std::string> tokenize(const std::string &input){
+  //bool quoteOpened = false;
+  //std::string text = input.substr(5);
+  enum State {NORMAL, SINGLE, DOUBLE};
+  State state = NORMAL;
+  std::string word = "";
+  std::vector<std::string> line; 
+  for(int i = 0; i < input.length();i++){
+    if(state != SINGLE && text[i] == '\\'){
+      if(i + 1 < text.size()){
+        word += text[i+1];
+        i++;
+      }
+    }else if(text[i] == '\'' && state != DOUBLE){
+      state = (state == SINGLE) ? NORMAL : SINGLE;
+    }else if(text[i] == '\"' && state != SINGLE){
+      state = (state == DOUBLE) ? NORMAL : DOUBLE;
+    }else if(text[i] == ' ' && state == NORMAL){
+      if(!word.empty()){
+        line.push_back(word);
+        word.clear();
+      }
+    }else{
+        word += text[i];
+    }
+
+
+  if(!word.empty()){
+    line.push_back(word);
+  }
+  // for(std::string s: line){
+  //   std::cout << s << " ";
+  // }
+  // std::cout << std::endl;
+  return line;
+}
+
+
+
 int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
@@ -21,32 +60,20 @@ int main() {
       break;
     }
     std::string part;
-    std::vector<std::string> wordcollector;
-    std::stringstream ss(input);
-    while(getline(ss, part, ' ')){
-      wordcollector.push_back(part);
-    }
+    std::vector<std::string> wordcollector = tokenize(input);
+    //std::stringstream ss(input);
+    // while(getline(ss, part, ' ')){
+    //   wordcollector.push_back(part);
+    // }
     if(wordcollector.empty()) continue;
     std::string file;
     bool redirect = false;
-    //    int saved_stdout = dup(STDOUT_FILENO);
     if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>")){
     // implement the > operator
       redirect = true;
       file = wordcollector.back();
       wordcollector.pop_back();
       wordcollector.pop_back();
-      // pid_t pid = fork();
-      // if(pid == 0){
-      //   if(writefile){
-      //     int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-      //     dup2(file_desc,STDOUT_FILENO);
-      //     close(file_desc);
-      //   }
-    
-      // }
-    // read the > or 1> 
-    // then open file
     }
 
     std::string command;
@@ -55,8 +82,7 @@ int main() {
       command += wordcollector[i];
     }
 
-    enum State {NORMAL, SINGLE, DOUBLE};
-    State state = NORMAL;
+
     if(input.substr(0,input.find(" ")) == "echo"){
       int saved_stdout = -1;
       if(redirect){
@@ -82,37 +108,7 @@ int main() {
       }
       continue;
       //implement echo with single quotes
-      // bool quoteOpened = false;
-      // std::string text = input.substr(5);
-      // std::string word = "";
-      // std::vector<std::string> line; 
-      // for(int i = 0; i < text.length();i++){
-      //   if(state != SINGLE && text[i] == '\\'){
-      //     if(i + 1 < text.size()){
-      //       word += text[i+1];
-      //       i++;
-      //     }
-      //   }else if(text[i] == '\'' && state != DOUBLE){
-      //     state = (state == SINGLE) ? NORMAL : SINGLE;
-      //   }else if(text[i] == '\"' && state != SINGLE){
-      //     state = (state == DOUBLE) ? NORMAL : DOUBLE;
-      //   }else if(text[i] == ' ' && state == NORMAL){
-      //     if(!word.empty()){
-      //       line.push_back(word);
-      //       word.clear();
-      //     }
-      //   }else{
-      //       word += text[i];
-      //   }
-    
 
-      // if(!word.empty()){
-      //   line.push_back(word);
-      // }
-      // for(std::string s: line){
-      //   std::cout << s << " ";
-      // }
-      // std::cout << std::endl;
     }else if(input.substr(0,input.find(" ")) == "type"){
       std::string path_env = std::getenv("PATH");
       std::stringstream ss_path(path_env);
