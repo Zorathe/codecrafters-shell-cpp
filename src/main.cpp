@@ -127,12 +127,25 @@ int main() {
       if(chdir(p.c_str()) != 0){
         std::cout << "cd: " << input.substr(input.find(" ")+1) << ": No such file or directory"<< std::endl;    
       }
-    }else if(input.substr(0,3) == "cat" || input[0] == '\'' || input[0] == '\"'){
+    }/*else if(input.substr(0,3) == "cat" || input[0] == '\'' || input[0] == '\"'){
       std::system(command.c_str());
 
       //std::cout << "entered cat: " << input << std::endl;
-    }else{
-      std::cout << input << ": command not found" << std::endl;
+    */}else{
+      std::vector<char*> c_args;
+      for(auto &a : wordcollector){
+        c_args.push_back(&a[0]);
+      }
+      c_args.push_back(nullptr);
+      pid_t pid = fork();
+      if(pid == 0){
+        execvp(command.c_str(), c_args.data());
+        std::cout << command << ": command not found\n";
+        exit(1);
+      }else{
+        wait(nullptr);
+      }
+      
     }
     if(writefile){
       saved_stdout = dup(STDOUT_FILENO);
