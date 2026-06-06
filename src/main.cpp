@@ -33,13 +33,21 @@ int main() {
     if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>")){
     // implement the > operator
       writefile = true;
-      file = wordcollector[wordcollector.size()-1];
+      file = wordcollector.back();
+      wordcollector.pop_back();
+      wordcollector.pop_back();
       int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
       dup2(file_desc,STDOUT_FILENO);
       close(file_desc);
       write(STDOUT_FILENO, "TEST\n", 5);
     // read the > or 1> 
     // then open file
+    }
+
+    std::string command;
+    for(int i = 0; i < wordcollector.size();i++){
+      if(i) command += " ";
+      command += wordcollector[i];
     }
 
     enum State {NORMAL, SINGLE, DOUBLE};
@@ -101,7 +109,7 @@ int main() {
         std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
       }
     }else if(input.substr(0,10) == "custom_exe"){
-      std::system(input.c_str());
+      std::system(command.c_str());
     
     }else if(input == "pwd"){
       std::cout << std::filesystem::current_path().string() << std::endl;
@@ -113,17 +121,17 @@ int main() {
         std::cout << "cd: " << input.substr(input.find(" ")+1) << ": No such file or directory"<< std::endl;    
       }
     }else if(input.substr(0,3) == "cat" || input[0] == '\'' || input[0] == '\"'){
-      std::system(input.c_str());
+      std::system(command.c_str());
 
       //std::cout << "entered cat: " << input << std::endl;
     }else{
       std::cout << input << ": command not found" << std::endl;
     }
-      if(writefile){
-        saved_stdout = dup(STDOUT_FILENO);
-        dup2(saved_stdout,STDOUT_FILENO);
-        close(saved_stdout);
-      }
+    if(writefile){
+      saved_stdout = dup(STDOUT_FILENO);
+      dup2(saved_stdout,STDOUT_FILENO);
+      close(saved_stdout);
+    }
   }
 
 }
