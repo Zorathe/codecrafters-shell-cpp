@@ -88,13 +88,13 @@ int main() {
         std::cout << "\n";  
       }
 
-      if(!word.empty()){
-        line.push_back(word);
-      }
-      for(std::string s: line){
-        std::cout << s << " ";
-      }
-      std::cout << std::endl;
+      // if(!word.empty()){
+      //   line.push_back(word);
+      // }
+      // for(std::string s: line){
+      //   std::cout << s << " ";
+      // }
+      // std::cout << std::endl;
     }else if(input.substr(0,input.find(" ")) == "type"){
       std::string path_env = std::getenv("PATH");
       std::stringstream ss_path(path_env);
