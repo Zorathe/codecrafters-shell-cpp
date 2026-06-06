@@ -28,7 +28,8 @@ int main() {
     }
     std::string file;
     bool writefile = false;
-    int saved_stdout = dup(STDOUT_FILENO);
+    int saved_stdout = -1;
+    //    int saved_stdout = dup(STDOUT_FILENO);
     if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>")){
     // implement the > operator
       writefile = true;
@@ -36,6 +37,7 @@ int main() {
       int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
       dup2(file_desc,STDOUT_FILENO);
       close(file_desc);
+      write(STDOUT_FILENO, "TEST\n", 5)
     // read the > or 1> 
     // then open file
     }
@@ -118,6 +120,7 @@ int main() {
       std::cout << input << ": command not found" << std::endl;
     }
       if(writefile){
+        saved_stdout = dup(STDOUT_FILENO);
         dup2(saved_stdout,STDOUT_FILENO);
         close(saved_stdout);
       }
