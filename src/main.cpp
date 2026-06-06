@@ -23,9 +23,11 @@ int main() {
     std::string part = "";
     std::vector<std::string> wordcollector; 
     std::stringstream ss(input);
+    std::cout << "first: " << std::endl;
     while(ss, part, " "){
       wordcollector.push_back(part);
     }
+    std::cout << "second: " << std::endl;
     for(std::string s: wordcollector){
       std::cout << s << std::endl;
     }
