@@ -170,9 +170,9 @@ int main() {
           close(file_desc);
         }
         execvp(c_args[0], c_args.data());
-        std::cout << command << ": command not found\n";
-        perror("execvp");
-        exit(1);
+        std::cerr << c_args[0] << ": command not found\n";
+        //perror("execvp");
+        exit(127);
       }else if(pid > 0){
         waitpid(pid, nullptr, 0);
       }else{
