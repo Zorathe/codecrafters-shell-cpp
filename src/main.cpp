@@ -114,7 +114,7 @@ int main() {
       }
     }else if(input.substr(0,3) == "cat" || input[0] == '\'' || input[0] == '\"'){
       std::system(input.c_str());
-      std::cout << "entered cat: " << std::endl;
+      std::cout << "entered cat: " << input << std::endl;
     }else{
       std::cout << input << ": command not found" << std::endl;
     }
