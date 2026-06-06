@@ -30,7 +30,7 @@ std::vector<std::string> tokenize(const std::string &input){
         word.clear();
       }
     }else{
-        word += text[i];
+        word += input[i];
     }
 
 
