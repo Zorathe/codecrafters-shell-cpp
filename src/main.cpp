@@ -115,15 +115,15 @@ int main() {
       }
     }else if(input.substr(0,3) == "cat" || input[0] == '\'' || input[0] == '\"'){
       std::system(input.c_str());
-      // if(writefile){
-      //   dup2(save,1);
-      //   close(save);
-      // }
+
       //std::cout << "entered cat: " << input << std::endl;
     }else{
       std::cout << input << ": command not found" << std::endl;
     }
-
+      if(writefile){
+        dup2(save,1);
+        close(save);
+      }
   }
 
 }
