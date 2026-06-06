@@ -21,16 +21,11 @@ int main() {
       break;
     }
     std::string part = "";
-    std::vector<std::string> wordcollector; 
-    std::stringstream ss(input);
-    std::cout << "first: " << std::endl;
-    while(ss, part, " "){
-      wordcollector.push_back(part);
-    }
-    std::cout << "second: " << std::endl;
-    for(std::string s: wordcollector){
-      std::cout << s << std::endl;
-    }
+    std::vector<std::string> wordcollector = split(input, ' ');
+    
+    // for(std::string s: wordcollector){
+    //   std::cout << s << std::endl;
+    // }
     std::string file;
     bool writefile = false;
     int save = dup(1);
