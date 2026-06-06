@@ -135,10 +135,10 @@ int main() {
       if(!pathExists){
         std::cout << input.substr(input.find(" ")+1) << ": not found" << std::endl;
       }
-    }else if(input.substr(0,10) == "custom_exe"){
+    }/*else if(input.substr(0,10) == "custom_exe"){
       std::system(command.c_str());
     
-    }else if(input == "pwd"){
+    }*/else if(input == "pwd"){
       std::cout << std::filesystem::current_path().string() << std::endl;
     
     }else if(input.substr(0,2) == "cd"){
