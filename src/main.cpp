@@ -20,6 +20,28 @@ int main() {
     if(input == "exit"){
       break;
     }
+    std::string part = "";
+    std::vector<std::string> wordcollector; 
+    std::stringstream ss(input);
+    while(ss, part, " "){
+      wordcollector.push_back(part);
+    }
+    std::string file;
+    bool writefile = false;
+    int save = dup(1);
+    if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>")){
+    // implement the > operator
+      writefile = true;
+      file = wordcollector[wordcollector.size()-1];
+      wordcollector.popback();
+      wordcollector.popback();
+      int file_finder = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+      dup2(file_finder,1);
+      close(file_finder);
+    // read the > or 1> 
+    // then open file
+    }
+
     enum State {NORMAL, SINGLE, DOUBLE};
     State state = NORMAL;
     if(input.substr(0,input.find(" ")) == "echo"){
@@ -94,6 +116,10 @@ int main() {
       std::system(input.c_str());
     }else{
       std::cout << input << ": command not found" << std::endl;
+    }
+    if(writefile){
+      dup2(save,1);
+      close(save);
     }
   }
 
