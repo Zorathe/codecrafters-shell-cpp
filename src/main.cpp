@@ -42,10 +42,7 @@ int main() {
     // read the > or 1> 
     // then open file
     }
-      if(writefile){
-        dup2(save,1);
-        close(save);
-      }
+
     enum State {NORMAL, SINGLE, DOUBLE};
     State state = NORMAL;
     if(input.substr(0,input.find(" ")) == "echo"){
@@ -123,7 +120,10 @@ int main() {
     }else{
       std::cout << input << ": command not found" << std::endl;
     }
-
+      if(writefile){
+        dup2(save,1);
+        close(save);
+      }
   }
 
 }
