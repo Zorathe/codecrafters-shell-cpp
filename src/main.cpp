@@ -15,7 +15,7 @@ std::vector<std::string> tokenize(const std::string &input){
   std::string word = "";
   std::vector<std::string> line; 
   for(int i = 0; i < input.length();i++){
-    if(state != SINGLE && text[i] == '\\'){
+    if(state != SINGLE && input[i] == '\\'){
       if(i + 1 < input.size()){
         word += input[i+1];
         i++;
