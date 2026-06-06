@@ -33,8 +33,8 @@ int main() {
     // implement the > operator
       writefile = true;
       file = wordcollector[wordcollector.size()-1];
-      wordcollector.pop_back();
-      wordcollector.pop_back();
+      // wordcollector.pop_back();
+      // wordcollector.pop_back();
       int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
       //std::cout << file_desc << std::endl;
       dup2(file_desc,1);
