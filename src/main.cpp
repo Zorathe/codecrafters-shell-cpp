@@ -44,9 +44,9 @@ int main() {
           close(file_desc);
         }
       }
-      execvp(argv[0], argv);
-      perror("execvp");
-      exit(1);
+      // execvp(argv[0], argv);
+      // perror("execvp");
+      // exit(1);
     // read the > or 1> 
     // then open file
     }
