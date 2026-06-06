@@ -36,10 +36,17 @@ int main() {
       file = wordcollector.back();
       wordcollector.pop_back();
       wordcollector.pop_back();
-      int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-      dup2(file_desc,STDOUT_FILENO);
-      close(file_desc);
-      write(STDOUT_FILENO, "TEST\n", 5);
+      pid_t pid = fork();
+      if(pid == 0){
+        if(writefile){
+          int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+          dup2(file_desc,STDOUT_FILENO);
+          close(file_desc);
+        }
+      }
+      execvp(argv[0], argv);
+      perror("execvp");
+      exit(1);
     // read the > or 1> 
     // then open file
     }
