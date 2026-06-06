@@ -26,13 +26,13 @@ int main() {
     while(getline(ss, part, ' ')){
       wordcollector.push_back(part);
     }
+    if(wordcollector.empty()) continue;
     std::string file;
-    bool writefile = false;
-    int saved_stdout = -1;
+    bool redirect = false;
     //    int saved_stdout = dup(STDOUT_FILENO);
     if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>")){
     // implement the > operator
-      writefile = true;
+      redirect = true;
       file = wordcollector.back();
       wordcollector.pop_back();
       wordcollector.pop_back();
@@ -58,6 +58,29 @@ int main() {
     enum State {NORMAL, SINGLE, DOUBLE};
     State state = NORMAL;
     if(input.substr(0,input.find(" ")) == "echo"){
+      int saved_stdout = -1;
+      if(redirect){
+        saved_stdout = dup(STDOUT_FILENO);
+        int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if(file_desc == -1){
+          perror("open");
+          continue;
+        }
+        dup2(file_desc, STDOUT_FILENO);
+        close(file_desc);
+      }
+      for(int i = 1; i < wordcollector.size();i++){
+        std::cout << wordcollector[i];
+        if(i + 1 < wordcollector.size()) std::cout << " ";
+      }
+      std::cout << std::endl;
+
+      if(redirect){
+        std::cout.flush();
+        dup2(saved_stdout, STDOUT_FILENO);
+        close(saved_stdout);
+      }
+      continue;
       //implement echo with single quotes
       // bool quoteOpened = false;
       // std::string text = input.substr(5);
