@@ -114,15 +114,18 @@ int main() {
         std::cout << "cd: " << input.substr(input.find(" ")+1) << ": No such file or directory"<< std::endl;    
       }
     }else if(input.substr(0,3) == "cat" || input[0] == '\'' || input[0] == '\"'){
-      std::system(input.c_str());
-      std::cout << "entered cat: " << input << std::endl;
+      
+      if(writefile){
+        dup2(save,1);
+        close(save);
+      }else{
+        std::system(input.c_str());
+      }
+      //std::cout << "entered cat: " << input << std::endl;
     }else{
       std::cout << input << ": command not found" << std::endl;
     }
-    if(writefile){
-      dup2(save,1);
-      close(save);
-    }
+
   }
 
 }
