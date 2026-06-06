@@ -164,7 +164,7 @@ int main() {
       c_args.push_back(nullptr);
       pid_t pid = fork();
       if(pid == 0){
-        if(writefile){
+        if(redirect){
           int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
           if(file_desc == -1){
             perror("open");
@@ -185,11 +185,11 @@ int main() {
       }
       
     }
-    saved_stdout = dup(STDOUT_FILENO);
-    if(writefile){
-      dup2(saved_stdout,STDOUT_FILENO);
-      close(saved_stdout);
-    }
+    // saved_stdout = dup(STDOUT_FILENO);
+    // if(writefile){
+    //   dup2(saved_stdout,STDOUT_FILENO);
+    //   close(saved_stdout);
+    // }
   }
 
 }
