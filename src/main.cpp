@@ -16,15 +16,15 @@ std::vector<std::string> tokenize(const std::string &input){
   std::vector<std::string> line; 
   for(int i = 0; i < input.length();i++){
     if(state != SINGLE && text[i] == '\\'){
-      if(i + 1 < text.size()){
-        word += text[i+1];
+      if(i + 1 < input.size()){
+        word += input[i+1];
         i++;
       }
-    }else if(text[i] == '\'' && state != DOUBLE){
+    }else if(input[i] == '\'' && state != DOUBLE){
       state = (state == SINGLE) ? NORMAL : SINGLE;
-    }else if(text[i] == '\"' && state != SINGLE){
+    }else if(input[i] == '\"' && state != SINGLE){
       state = (state == DOUBLE) ? NORMAL : DOUBLE;
-    }else if(text[i] == ' ' && state == NORMAL){
+    }else if(input[i] == ' ' && state == NORMAL){
       if(!word.empty()){
         line.push_back(word);
         word.clear();
