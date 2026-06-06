@@ -81,7 +81,7 @@ int main() {
       //   }else{
       //       word += text[i];
       //   }
-        for(int i = 1; I M wordcollector.size();i++){
+        for(int i = 1; i < wordcollector.size();i++){
           if(i > 1)
             std::cout << " ";
         }
