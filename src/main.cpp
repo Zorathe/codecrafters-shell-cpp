@@ -20,9 +20,12 @@ int main() {
     if(input == "exit"){
       break;
     }
-    std::string part = "";
-    std::vector<std::string> wordcollector = split(input, ' ');
-    
+    std::string part;
+    std::vector<std::string> wordcollector;
+    std::stringstream ss(input);
+    while(getline(ss, part, ' ')){
+      wordcollector.push_back(part);
+    }
     // for(std::string s: wordcollector){
     //   std::cout << s << std::endl;
     // }
