@@ -104,11 +104,6 @@ int main() {
       //   }else{
       //       word += text[i];
       //   }
-        for(int i = 1; i < wordcollector.size();i++){
-          if(i > 1)
-            std::cout << " ";
-        }
-        std::cout << "\n";  
     
 
       // if(!word.empty()){
@@ -180,16 +175,13 @@ int main() {
         std::cout << command << ": command not found\n";
         perror("execvp");
         exit(1);
+      }else if(pid > 0){
+        waitpid(pid, nullptr, 0);
       }else{
-        wait(nullptr);
+        perror("fork");
       }
       
     }
-    // saved_stdout = dup(STDOUT_FILENO);
-    // if(writefile){
-    //   dup2(saved_stdout,STDOUT_FILENO);
-    //   close(saved_stdout);
-    // }
   }
 
 }
