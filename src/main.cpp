@@ -5,7 +5,7 @@
 #include <filesystem>
 #include <regex>
 #include <fcntl.h>
-
+#include <sys/wait.h>
 
 int main() {
   // Flush after every std::cout / std:cerr
