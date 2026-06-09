@@ -98,7 +98,7 @@ int main() {
           continue;
         }
         if(redirect_type == "2>"){
-          saved_stderr = dup(STDOUT_FILENO);
+          saved_stderr = dup(STDERR_FILENO);
           dup2(file_desc, STDERR_FILENO);
         }else{
           saved_stdout = dup(STDOUT_FILENO);
@@ -179,7 +179,7 @@ int main() {
         if(redirect){
           int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
           if(redirect_type == "2>"){
-            if(dup2(file_desc, STDOUT_FILENO) == -1){
+            if(dup2(file_desc, STDERR_FILENO) == -1){
               perror("dup2");
               exit(1);
             }
