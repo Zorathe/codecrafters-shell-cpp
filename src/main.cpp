@@ -86,15 +86,25 @@ int main() {
 
 
     if(input.substr(0,input.find(" ")) == "echo"){
+      
       int saved_stdout = -1;
+      int saved_stderr = -1;
+
       if(redirect){
-        saved_stdout = dup(STDOUT_FILENO);
+        //saved_stdout = dup(STDOUT_FILENO);
         int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
         if(file_desc == -1){
           perror("open");
           continue;
         }
-        dup2(file_desc, STDOUT_FILENO);
+        if(redirect_type == "2>"){
+          saved_stderr = dup(STDOUT_FILENO);
+          dup2(file_desc, STDERR_FILENO);
+        }else{
+          saved_stdout = dup(STDOUT_FILENO);
+          dup2(saved_stdout, STDOUT_FILENO);
+          
+        }
         close(file_desc);
       }
       for(int i = 1; i < wordcollector.size();i++){
@@ -105,8 +115,15 @@ int main() {
 
       if(redirect){
         std::cout.flush();
-        dup2(saved_stdout, STDOUT_FILENO);
-        close(saved_stdout);
+        std::cerr.flush();
+        if(redirect_type == "2>"){
+          dup2(saved_stderr, STDOUT_FILENO);
+          close(saved_stderr);
+        }else{
+          dup2(saved_stdout, STDOUT_FILENO);
+          close(saved_stdout);
+        }
+        
       }
       continue;
       //implement echo with single quotes
@@ -170,7 +187,7 @@ int main() {
             perror("dup2");
             exit(1);
           }
-          
+
           if(file_desc == -1){
             perror("open");
             exit(1);
