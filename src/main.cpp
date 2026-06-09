@@ -94,7 +94,7 @@ int main() {
         //saved_stdout = dup(STDOUT_FILENO);
         int file_desc;
         if(redirect_type == ">>" || redirect_type == "1>>"){
-          file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
+          file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0644);
         }else{
           file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
         }
