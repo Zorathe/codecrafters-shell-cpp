@@ -183,7 +183,7 @@ int main() {
       if(pid == 0){
         if(redirect){
         int file_desc;
-        if(wordcollector[wordcollector.size()-2] == ">>" || wordcollector[wordcollector.size()-2] == "1>>"){
+        if(redirect_type == ">>" || redirect_type == "1>>"){
           file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
         }else{
           file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
