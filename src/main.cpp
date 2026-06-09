@@ -68,9 +68,11 @@ int main() {
     if(wordcollector.empty()) continue;
     std::string file;
     bool redirect = false;
+    std::string redirect_type;
     if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>" || wordcollector[wordcollector.size()-2] == "2>")){
     // implement the > operator
       redirect = true;
+      redirect_type = wordcollector[wordcollector.size()-2];
       file = wordcollector.back();
       wordcollector.pop_back();
       wordcollector.pop_back();
@@ -159,19 +161,21 @@ int main() {
       if(pid == 0){
         if(redirect){
           int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-          if(wordcollector[wordcollector.size()-2] == "2>"){
-            dup2(file_desc,2);
-          }/*else{
-          //   dup2(file_desc,1);
-          }*/
+          if(redirect_type == "2>"){
+            if(dup2(file_desc, STDOUT_FILENO) == -1){
+              perror("dup2");
+              exit(1);
+            }
+          }else if(dup2(file_desc, STDOUT_FILENO) == -1){
+            perror("dup2");
+            exit(1);
+          }
+          
           if(file_desc == -1){
             perror("open");
             exit(1);
           }
-          if(dup2(file_desc, STDOUT_FILENO) == -1){
-            perror("dup2");
-            exit(1);
-          }
+
           close(file_desc);
         }
         execvp(c_args[0], c_args.data());
