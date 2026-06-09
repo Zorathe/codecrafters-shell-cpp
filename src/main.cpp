@@ -69,7 +69,7 @@ int main() {
     std::string file;
     bool redirect = false;
     std::string redirect_type;
-    if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>" || wordcollector[wordcollector.size()-2] == "2>")){
+    if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>" || wordcollector[wordcollector.size()-2] == "2>" || wordcollector[wordcollector.size()-2] == ">>" || wordcollector[wordcollector.size()-2] == "1>>")){
     // implement the > operator
       redirect = true;
       redirect_type = wordcollector[wordcollector.size()-2];
