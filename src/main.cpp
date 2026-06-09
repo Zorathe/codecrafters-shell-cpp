@@ -122,7 +122,7 @@ int main() {
         std::cout.flush();
         std::cerr.flush();
         if(redirect_type == "2>"){
-          dup2(saved_stderr, STDWEE_FILENO);
+          dup2(saved_stderr, STDERR_FILENO);
           close(saved_stderr);
         }else{
           dup2(saved_stdout, STDOUT_FILENO);
