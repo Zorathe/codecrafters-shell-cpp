@@ -92,7 +92,12 @@ int main() {
 
       if(redirect){
         //saved_stdout = dup(STDOUT_FILENO);
-        int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        int file_desc;
+        if(wordcollector[wordcollector.size()-2] == ">>" || wordcollector[wordcollector.size()-2] == "1>>"){
+          file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
+        }else{
+          file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        }
         if(file_desc == -1){
           perror("open");
           continue;
@@ -177,7 +182,12 @@ int main() {
       pid_t pid = fork();
       if(pid == 0){
         if(redirect){
-          int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        int file_desc;
+        if(wordcollector[wordcollector.size()-2] == ">>" || wordcollector[wordcollector.size()-2] == "1>>"){
+          file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
+        }else{
+          file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        }
           if(redirect_type == "2>"){
             if(dup2(file_desc, STDERR_FILENO) == -1){
               perror("dup2");
@@ -197,7 +207,6 @@ int main() {
         }
         execvp(c_args[0], c_args.data());
         std::cerr << c_args[0] << ": command not found\n";
-        //perror("execvp");
         exit(127);
       }else if(pid > 0){
         waitpid(pid, nullptr, 0);
