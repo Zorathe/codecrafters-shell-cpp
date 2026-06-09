@@ -93,7 +93,7 @@ int main() {
       if(redirect){
         //saved_stdout = dup(STDOUT_FILENO);
         int file_desc;
-        if(wordcollector[wordcollector.size()-2] == ">>" || wordcollector[wordcollector.size()-2] == "1>>"){
+        if(redirect_type == ">>" || redirect_type == "1>>"){
           file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
         }else{
           file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -122,7 +122,7 @@ int main() {
         std::cout.flush();
         std::cerr.flush();
         if(redirect_type == "2>"){
-          dup2(saved_stderr, STDOUT_FILENO);
+          dup2(saved_stderr, STDWEE_FILENO);
           close(saved_stderr);
         }else{
           dup2(saved_stdout, STDOUT_FILENO);
@@ -188,18 +188,17 @@ int main() {
         }else{
           file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
         }
-          if(redirect_type == "2>"){
+          if(file_desc == -1){
+            perror("open");
+            exit(1);
+          }
+        if(redirect_type == "2>"){
             if(dup2(file_desc, STDERR_FILENO) == -1){
               perror("dup2");
               exit(1);
             }
           }else if(dup2(file_desc, STDOUT_FILENO) == -1){
             perror("dup2");
-            exit(1);
-          }
-
-          if(file_desc == -1){
-            perror("open");
             exit(1);
           }
 
