@@ -68,7 +68,7 @@ int main() {
     if(wordcollector.empty()) continue;
     std::string file;
     bool redirect = false;
-    if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>")){
+    if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>" || wordcollector[wordcollector.size()-2] == "2>")){
     // implement the > operator
       redirect = true;
       file = wordcollector.back();
