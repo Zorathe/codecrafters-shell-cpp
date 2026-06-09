@@ -102,7 +102,7 @@ int main() {
           dup2(file_desc, STDERR_FILENO);
         }else{
           saved_stdout = dup(STDOUT_FILENO);
-          dup2(saved_stdout, STDOUT_FILENO);
+          dup2(file_desc, STDOUT_FILENO);
           
         }
         close(file_desc);
