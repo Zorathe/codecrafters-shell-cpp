@@ -69,7 +69,7 @@ int main() {
     std::string file;
     bool redirect = false;
     std::string redirect_type;
-    if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>" || wordcollector[wordcollector.size()-2] == "2>" || wordcollector[wordcollector.size()-2] == ">>" || wordcollector[wordcollector.size()-2] == "1>>")){
+    if(wordcollector.size() > 2 && (wordcollector[wordcollector.size()-2] == ">" || wordcollector[wordcollector.size()-2] == "1>" || wordcollector[wordcollector.size()-2] == "2>" || wordcollector[wordcollector.size()-2] == ">>" || wordcollector[wordcollector.size()-2] == "1>>" || wordcollector[wordcollector.size()-2] == "2>>")){
     // implement the > operator
       redirect = true;
       redirect_type = wordcollector[wordcollector.size()-2];
@@ -93,7 +93,7 @@ int main() {
       if(redirect){
         //saved_stdout = dup(STDOUT_FILENO);
         int file_desc;
-        if(redirect_type == ">>" || redirect_type == "1>>"){
+        if(redirect_type == ">>" || redirect_type == "1>>" || redirect_type == "2>>"){
           file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0644);
         }else{
           file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -102,7 +102,7 @@ int main() {
           perror("open");
           continue;
         }
-        if(redirect_type == "2>"){
+        if(redirect_type == "2>" || redirect_type == "2>>"){
           saved_stderr = dup(STDERR_FILENO);
           dup2(file_desc, STDERR_FILENO);
         }else{
@@ -183,7 +183,7 @@ int main() {
       if(pid == 0){
         if(redirect){
         int file_desc;
-        if(redirect_type == ">>" || redirect_type == "1>>"){
+        if(redirect_type == ">>" || redirect_type == "1>>" || redirect_type == "2>>"){
           file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
         }else{
           file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
@@ -192,7 +192,7 @@ int main() {
             perror("open");
             exit(1);
           }
-        if(redirect_type == "2>"){
+        if(redirect_type == "2>" || redirect_type == "2>>"){
             if(dup2(file_desc, STDERR_FILENO) == -1){
               perror("dup2");
               exit(1);
