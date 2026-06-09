@@ -161,9 +161,9 @@ int main() {
           int file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
           if(wordcollector[wordcollector.size()-2] == "2>"){
             dup2(file_desc,2);
-          }else{
-            dup2(file_desc,1);
-          }
+          }/*else{
+          //   dup2(file_desc,1);
+          }*/
           if(file_desc == -1){
             perror("open");
             exit(1);
