@@ -45,7 +45,14 @@ std::vector<std::string> tokenize(const std::string &input){
   // std::cout << std::endl;
   return line;
 }
-
+  static const char *builtins[] = {
+    "echo",
+    "exit",
+    "type",
+    "pwd",
+    "cd",
+    nullptr
+  };
 char *command_generator(const char *text, int state){
   int i;
   int len;
@@ -72,14 +79,7 @@ int main() {
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
 
-  static const char *builtins[] = {
-    "echo",
-    "exit",
-    "type",
-    "pwd",
-    "cd",
-    nullptr
-  };
+
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
   
