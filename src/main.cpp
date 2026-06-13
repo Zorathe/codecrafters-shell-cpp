@@ -46,12 +46,41 @@ std::vector<std::string> tokenize(const std::string &input){
   return line;
 }
 
+char *command_generator(const char *text, int state){
+  int i;
+  int len;
+  if(!state){
+    index = 0;
+    len = strlen(text);
+  }
+  while(builtins[index]){
+    const char *cmd = builtins[i++];
+    if(strcmp(cmd,text,len) == 0)
+      return stdup(cmd);
+  }
+  return nullptr;
+}
 
+char **my_completetion(const char *text, int start, int end){
+  (void)start;
+  (void)end;
+  return rl_completion_matches(text,command_generator);
+}
 
 int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
+
+  static const char *builtins[] = {
+    "echo",
+    "exit",
+    "type",
+    "pwd",
+    "cd",
+    nullptr
+  };
+  rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
   
   while(true){
@@ -61,6 +90,10 @@ int main() {
     char* line = readline("$ " );
     if(!line) break;
     std::string input(line);
+    if(!input.empty()){
+      add_history(input.c_str());
+    }
+    if(*line) add_history(line);
     free(line);
     if(input == "exit"){
       break;
@@ -91,7 +124,7 @@ int main() {
     }
 
 
-    if(input.substr(0,input.find(" ")) == "echo"){
+    if(wordcollector[0] == "echo"){
       
       int saved_stdout = -1;
       int saved_stderr = -1;
@@ -127,7 +160,7 @@ int main() {
       if(redirect){
         std::cout.flush();
         std::cerr.flush();
-        if(redirect_type == "2>"){
+        if(redirect_type == "2>" || redirect_type == "2>>"){
           dup2(saved_stderr, STDERR_FILENO);
           close(saved_stderr);
         }else{
@@ -141,7 +174,7 @@ int main() {
 
     }else if(command == "exit"){
       return 0;
-    }else if(input.substr(0,input.find(" ")) == "type"){
+    }else if(wordcollector[0] == "type"){
       std::string path_env = std::getenv("PATH");
       std::stringstream ss_path(path_env);
       std::string path; //= path_env.substr(0,path_env.find(":")) + '/' + input.substr(input.find(" ")+1);
@@ -169,7 +202,7 @@ int main() {
     }*/else if(input == "pwd"){
       std::cout << std::filesystem::current_path().string() << std::endl;
     
-    }else if(input.substr(0,2) == "cd"){
+    }else if(wordcollector[0] == "cd"){
         std::string p = input.substr(input.find(" ")+1);
         p = std::regex_replace(p, std::regex("~"), std::getenv("HOME"));
       if(chdir(p.c_str()) != 0){
