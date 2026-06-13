@@ -63,12 +63,12 @@ char *command_generator(const char *text, int state){
   while(builtins[i]){
     const char *cmd = builtins[i++];
     if(strcmp(cmd,text) == 0)
-      return stdup(cmd);
+      return strdup(cmd);
   }
   return nullptr;
 }
 
-char **my_completetion(const char *text, int start, int end){
+char **my_completion(const char *text, int start, int end){
   (void)start;
   (void)end;
   return rl_completion_matches(text,command_generator);
