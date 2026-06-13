@@ -6,6 +6,8 @@
 #include <regex>
 #include <fcntl.h>
 #include <sys/wait.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 std::vector<std::string> tokenize(const std::string &input){
   //bool quoteOpened = false;
@@ -50,7 +52,7 @@ int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
-
+  rl_bind_key('\t', rl_complete);
   
   while(true){
     std::cout << "$ " << std::flush;
@@ -173,7 +175,18 @@ int main() {
       std::system(command.c_str());
 
       //std::cout << "entered cat: " << input << std::endl;
-    */}else{
+    */
+    }else if(command == '\t'){
+      if(command == "ech"){
+        command = "echo ";
+        std::cout << "o " << std::flush;
+      }else if(command == "exi"){
+        command = "exit ";
+        std::cout << "t " << std::flush;
+      }else{
+        std::cout << "\a" << std::flush;
+      }
+    }else{
       std::vector<char*> c_args;
       for(auto &a : wordcollector){
         c_args.push_back(&a[0]);
