@@ -50,7 +50,7 @@ char *command_generator(const char *text, int state){
   int i;
   int len;
   if(!state){
-    index = 0;
+    i = 0;
     len = strlen(text);
   }
   while(builtins[index]){
