@@ -62,7 +62,7 @@ char *command_generator(const char *text, int state){
   }
   while(builtins[i]){
     const char *cmd = builtins[i++];
-    if(strcmp(cmd,text) == 0 && strcmp(len,text) == 0 && strcmp(cmd,len) == 0)
+    if(strncmp(cmd,text,len) == 0)
       return strdup(cmd);
   }
   return nullptr;
