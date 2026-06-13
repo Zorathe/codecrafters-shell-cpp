@@ -87,7 +87,7 @@ std::vector<std::string> get_all_commands(){
   for(auto &e: execs){
     cmds.insert(e);
   }
-  return std::vector<std::string>(cmd.begin(),cmd.end());
+  return std::vector<std::string>(cmds.begin(),cmds.end());
 }
 
 char *command_generator(const char *text, int state){
