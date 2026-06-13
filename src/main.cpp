@@ -45,6 +45,30 @@ std::vector<std::string> tokenize(const std::string &input){
   // std::cout << std::endl;
   return line;
 }
+
+std::vector<std::string> get_path_executables(){
+  std::set<std::string> results;
+
+  char *path_env = getenv("PATH");
+  if(!path_env) return {};
+
+  std::stringstream ss(path_env);
+  std::string dir;
+
+  while(std::getline(ss,dir, ':')){
+    for(const auto &entry: std::filesystem::directory_iterator(dir)){
+      if(!entry.is_regular_file()){continue;}
+      std::string name = entry.path().filename().string();
+
+      if(access(entry.path().c_str(), X_OK) == 0){
+        results.insert(name);
+      }
+    }
+  }
+  return std::vector<std::string>(results.begin(),results.end());
+}
+
+std::vector<std::string> get_all_commands(){
   static const char *builtins[] = {
     "echo",
     "exit",
@@ -53,25 +77,44 @@ std::vector<std::string> tokenize(const std::string &input){
     "cd",
     nullptr
   };
+  std::set<std::string> cmds;
+
+  for(int i = 0; builtins[i];i++){
+    cmds.insert(builtins[i]);
+  }
+  auto execs = get_path_executables();
+  for(auto &e: execs){
+    cmds.insert(e);
+  }
+  return std::vector<std::string>(cmd.begin(),cmd.end());
+}
+
 char *command_generator(const char *text, int state){
+  static std::vector<std::string> matches;
   static int i;
   static size_t len;
   if(!state){
+    matches.clear();
     i = 0;
     len = strlen(text);
+    auto cmds = get_all_commands();
+    for(const auto &cmd : cmds){
+      if(strncmp(cmd.c_str(),text,len) == 0){
+        matches.push_back(cmd);
+      }
+    }
   }
-  while(builtins[i]){
-    const char *cmd = builtins[i++];
-    if(strncmp(cmd,text,len) == 0)
-      return strdup(cmd);
+  if(i < matches.size()){
+    return strdup(matches[i++].c_str());
   }
   return nullptr;
 }
 
 char **my_completion(const char *text, int start, int end){
-  (void)start;
   (void)end;
-  return rl_completion_matches(text,command_generator);
+  if(start == 0)
+    return rl_completion_matches(text,command_generator);
+  return nullptr;
 }
 
 int main() {
