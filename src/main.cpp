@@ -8,6 +8,7 @@
 #include <sys/wait.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <set> 
 
 std::vector<std::string> tokenize(const std::string &input){
   //bool quoteOpened = false;
