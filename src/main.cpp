@@ -176,16 +176,16 @@ int main() {
 
       //std::cout << "entered cat: " << input << std::endl;
     */
-    }else if(command == '\t'){
-      if(command == "ech"){
-        command = "echo ";
-        std::cout << "o " << std::flush;
-      }else if(command == "exi"){
-        command = "exit ";
-        std::cout << "t " << std::flush;
-      }else{
-        std::cout << "\a" << std::flush;
-      }
+    // }else if(command == '\t'){
+    //   if(command == "ech"){
+    //     command = "echo ";
+    //     std::cout << "o " << std::flush;
+    //   }else if(command == "exi"){
+    //     command = "exit ";
+    //     std::cout << "t " << std::flush;
+    //   }else{
+    //     std::cout << "\a" << std::flush;
+    //   }
     }else{
       std::vector<char*> c_args;
       for(auto &a : wordcollector){
