@@ -60,9 +60,9 @@ char *command_generator(const char *text, int state){
     i = 0;
     len = strlen(text);
   }
-  while(builtins[index]){
+  while(builtins[i]){
     const char *cmd = builtins[i++];
-    if(strcmp(cmd,text,len) == 0)
+    if(strcmp(cmd,text) == 0)
       return stdup(cmd);
   }
   return nullptr;
