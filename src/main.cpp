@@ -55,9 +55,13 @@ int main() {
   rl_bind_key('\t', rl_complete);
   
   while(true){
-    std::cout << "$ " << std::flush;
-    std::string input;
-    std::getline(std::cin, input);
+    // std::cout << "$ " << std::flush;
+    // std::string input;
+    // std::getline(std::cin, input);
+    char* line = readline("$ " );
+    if(!line) break;
+    std::string input(line);
+    free(line);
     if(input == "exit"){
       break;
     }
