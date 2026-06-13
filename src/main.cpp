@@ -54,15 +54,15 @@ std::vector<std::string> tokenize(const std::string &input){
     nullptr
   };
 char *command_generator(const char *text, int state){
-  int i;
-  int len;
+  static int i;
+  static size_t len;
   if(!state){
     i = 0;
     len = strlen(text);
   }
   while(builtins[i]){
     const char *cmd = builtins[i++];
-    if(strcmp(cmd,text) == 0)
+    if(strcmp(cmd,text,len) == 0)
       return strdup(cmd);
   }
   return nullptr;
