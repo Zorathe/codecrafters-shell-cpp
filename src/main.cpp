@@ -251,7 +251,8 @@ int main() {
       if(wordcollector.size() >= 4 && wordcollector[1] == "-C"){
           completion_script[wordcollector[3]] = wordcollector[2];
       }else if(wordcollector.size() >= 3 && wordcollector[1] == "-p"){
-        std::cout << "complete -C " << completion_script[wordcollector[3]] << " " << completion_script[wordcollector[3]]->second << "\n";
+        auto it = completion_script.find(wordcollector[3]);
+        std::cout << "complete -C " << completion_script[wordcollector[3]] << " " << it->second << "\n";
       }else{
         std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
       }
