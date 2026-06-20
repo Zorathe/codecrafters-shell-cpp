@@ -244,6 +244,10 @@ int main() {
       if(chdir(p.c_str()) != 0){
         std::cout << "cd: " << input.substr(input.find(" ")+1) << ": No such file or directory"<< std::endl;    
       }
+    }else if(wordcollector[0] == "complete"){
+        if(wordcollector.size() >= 3 && wordcollector[1] == "-p"){
+          std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
+        }
     }else{
       std::vector<char*> c_args;
       for(auto &a : wordcollector){
