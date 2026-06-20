@@ -9,6 +9,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <set> 
+#include <unordered_map>
+
 
 std::vector<std::string> tokenize(const std::string &input){
   //bool quoteOpened = false;
