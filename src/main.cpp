@@ -116,6 +116,7 @@ char **my_completion(const char *text, int start, int end){
     return rl_completion_matches(text,command_generator);
   return nullptr;
 }
+static std::unordered_map<std::string,std::string> completion_script;
 
 int main() {
   // Flush after every std::cout / std:cerr
@@ -125,7 +126,6 @@ int main() {
 
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
-  std::unordered_map<std::string,std::string> completion_script;
   while(true){
     // std::cout << "$ " << std::flush;
     // std::string input;
