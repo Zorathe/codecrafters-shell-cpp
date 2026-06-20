@@ -122,7 +122,7 @@ int main() {
 
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
-  
+  std::unordered_map<std::string,std::string> completion_script;
   while(true){
     // std::cout << "$ " << std::flush;
     // std::string input;
@@ -245,9 +245,14 @@ int main() {
         std::cout << "cd: " << input.substr(input.find(" ")+1) << ": No such file or directory"<< std::endl;    
       }
     }else if(wordcollector[0] == "complete"){
-        if(wordcollector.size() >= 3 && wordcollector[1] == "-p"){
-          std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
-        }
+    
+      if(wordcollector.size() >= 4 && wordcollector[1] == "-C"){
+          completion_script[wordcollector[3]] = wordcollector[2];
+      }else if(wordcollector.size() >= 3 && wordcollector[1] == "-p"){
+        std::cout << "complete -C " << completion_script[wordcollector[3]] << " " << completion_script[wordcollector[3]]->second << "\n";
+      }else{
+        std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
+      }
     }else{
       std::vector<char*> c_args;
       for(auto &a : wordcollector){
