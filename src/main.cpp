@@ -255,6 +255,8 @@ int main() {
         auto it = completion_script.find(wordcollector[2]);
         if(it != completion_script.end()){
           std::cout << "complete -C '" << it->second << "' " << wordcollector[2] << "\n";
+        }else{
+          std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
         }
       }else{
         std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
