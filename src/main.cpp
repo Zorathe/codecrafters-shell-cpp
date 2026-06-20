@@ -40,10 +40,6 @@ std::vector<std::string> tokenize(const std::string &input){
   if(!word.empty()){
     line.push_back(word);
   }
-  // for(std::string s: line){
-  //   std::cout << s << " ";
-  // }
-  // std::cout << std::endl;
   return line;
 }
 
@@ -164,7 +160,6 @@ int main() {
       command += wordcollector[i];
     }
 
-
     if(wordcollector[0] == "echo"){
       
       int saved_stdout = -1;
@@ -221,7 +216,7 @@ int main() {
       std::string path; //= path_env.substr(0,path_env.find(":")) + '/' + input.substr(input.find(" ")+1);
       bool pathExists = false;
 
-      if(input.substr(input.find(" ")+1,4) == "echo"  || input.substr(input.find(" ")+1,4) == "exit" || input.substr(input.find(" ")+1,4) == "type" || input.substr(input.find(" ")+1,3) == "pwd" ){
+      if(input.substr(input.find(" ")+1,4) == "echo"  || input.substr(input.find(" ")+1,4) == "exit" || input.substr(input.find(" ")+1,4) == "type" || input.substr(input.find(" ")+1,3) == "pwd" || input.substr(input.find(" ")+1,8) == "complete"){
         std::cout << input.substr(input.find(" ")+1,4) << " is a shell builtin" << std::endl;
         pathExists = true;
       }else{
@@ -249,21 +244,6 @@ int main() {
       if(chdir(p.c_str()) != 0){
         std::cout << "cd: " << input.substr(input.find(" ")+1) << ": No such file or directory"<< std::endl;    
       }
-    /*}else if(input.substr(0,3) == "cat" || input[0] == '\'' || input[0] == '\"'){
-      std::system(command.c_str());
-
-      //std::cout << "entered cat: " << input << std::endl;
-    */
-    // }else if(command == '\t'){
-    //   if(command == "ech"){
-    //     command = "echo ";
-    //     std::cout << "o " << std::flush;
-    //   }else if(command == "exi"){
-    //     command = "exit ";
-    //     std::cout << "t " << std::flush;
-    //   }else{
-    //     std::cout << "\a" << std::flush;
-    //   }
     }else{
       std::vector<char*> c_args;
       for(auto &a : wordcollector){
