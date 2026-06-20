@@ -217,7 +217,7 @@ int main() {
       bool pathExists = false;
 
       if(input.substr(input.find(" ")+1,4) == "echo"  || input.substr(input.find(" ")+1,4) == "exit" || input.substr(input.find(" ")+1,4) == "type" || input.substr(input.find(" ")+1,3) == "pwd" || input.substr(input.find(" ")+1,8) == "complete"){
-        std::cout << input.substr(input.find(" ")+1,4) << " is a shell builtin" << std::endl;
+        std::cout << input.substr(input.find(" ")+1) << " is a shell builtin" << std::endl;
         pathExists = true;
       }else{
         while(std::getline(ss_path,path, ':')){
