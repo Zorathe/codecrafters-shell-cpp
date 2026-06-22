@@ -98,7 +98,6 @@ std::vector<std::string> get_all_commands(){
 char *command_generator(const char *text, int state){
   static std::vector<std::string> matches;
   static int i;
-  static size_t len;
   if(!state){
     matches.clear();
     i = 0;
@@ -115,8 +114,6 @@ char *command_generator(const char *text, int state){
   }
   return nullptr;
 }
-
-
 
 std::vector<std::string> run_completer_script(const std::string &script, const std::string &command, const std::string &current_word){
   std::vector<std::string> result;
@@ -184,14 +181,16 @@ char* script_generator(const char* text, int state){
 char **my_completion(const char *text, int start, int end){
   (void)end;
 
-  rl_attempted_completion_over = 1;
-
   if(start == 0)
+    rl_attempted_completion_over = 1;
     return rl_completion_matches(text,command_generator);
 
   std::string line(rl_line_buffer);
-
+  bool is_new_word = start > 0 && std::isspace((unsigned char) rl_line_buffer[start - 1]);
   auto words = tokenize(line);
+  if(is_new_word){
+    words.push_back("");
+  }
 
   if(words.empty()){
     return nullptr;
@@ -203,13 +202,21 @@ char **my_completion(const char *text, int start, int end){
   if(it == completion_script.end()){
     return nullptr;
   }
+  std::string current_word;
 
-  script_matches = run_completer_script(it->second, command, text);
+  if(words.size() >= 2){
+    current_word = words.back();
+  }
+  
+  script_matches = run_completer_script(it->second, command, current_word);
 
   if(script_matches.empty()){
+    rl_attempted_completion_over = 1;
     return nullptr;
   }
 
+  rl_attempted_completion_over = 1;
+  rl_completion_append_character = ' ';
   return rl_completion_matches(text,script_generator);
 }
 
