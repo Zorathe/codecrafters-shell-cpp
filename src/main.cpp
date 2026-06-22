@@ -360,6 +360,8 @@ int main() {
           }
           
         }
+      }else if(wordcollector.size() == 3 && wordcollector[1] == "-r"){
+        completion_script.erase(wordcollector[2]);
       }else{
         if(wordcollector.size() >= 3){
             std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
