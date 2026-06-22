@@ -131,13 +131,15 @@ std::vector<std::string> run_completer_script(const std::string &script, const s
   }
 
   if(pid == 0){
-    dup2(pipefd[1], STDOUT_FILENO);
+    if(dup2(pipefd[1], STDOUT_FILENO) == -1){
+      _exit(127);
+    }
 
     close(pipefd[0]);
     close(pipefd[1]);
 
     execl(script.c_str(), script.c_str(), command.c_str(), current_word.c_str(), previous_word.c_str(), (char*)nullptr);
-
+    perror(script.c_str());
     _exit(127);
   }
   close(pipefd[1]);
@@ -226,7 +228,7 @@ char **my_completion(const char *text, int start, int end){
   }
 
   rl_attempted_completion_over = 1;
-  rl_completion_append_character = ' ';
+  rl_completion_append_character = '\0';
   return rl_completion_matches(text,script_generator);
 }
 
@@ -234,7 +236,6 @@ int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
-  bool file_completion = true;
 
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
@@ -250,7 +251,6 @@ int main() {
     if(input == "exit"){
       break;
     }
-    std::string part;
     std::vector<std::string> wordcollector = tokenize(input);
     //std::stringstream ss(input);
     // while(getline(ss, part, ' ')){
@@ -270,7 +270,6 @@ int main() {
     }
 
     std::string command;
-    std::string base = wordcollector[0];
     for(int i = 0; i < wordcollector.size();i++){
       if(i) command += " ";
       command += wordcollector[i];
@@ -377,7 +376,11 @@ int main() {
           
         }
       }else{
-        std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
+        if(wordcollector.size() >= 3){
+            std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
+          }else{
+            std::cout << "complete: invalid usage\n";
+          }
       }
     }else{
       std::vector<char*> c_args;
