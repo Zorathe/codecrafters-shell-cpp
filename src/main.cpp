@@ -11,6 +11,10 @@
 #include <set> 
 #include <unordered_map>
 #include <cstdio>
+#include <vector>
+#include <cstring>
+#include <cstdlib>
+
 
 std::vector<std::string> tokenize(const std::string &input){
   //bool quoteOpened = false;
@@ -118,8 +122,8 @@ char **my_completion(const char *text, int start, int end){
 }
 
 std::set<std::string> run_completer_script(const std::string &path, const std::string &command, const std::string &word){
-  std::string l = "\"" + path + "\"" + command + " " + word;
-  FILE *pipe popen(l.c_str(), "r");
+  std::string l = "\"" + path + "\" " + command + " " + word;
+  FILE *pipe = popen(l.c_str(), "r");
   std::set<std::string> w;
   if(!pipe) return w;
   char buffer[256];
