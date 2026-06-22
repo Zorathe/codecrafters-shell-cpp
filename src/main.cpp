@@ -138,6 +138,10 @@ std::vector<std::string> run_completer_script(const std::string &script, const s
     close(pipefd[0]);
     close(pipefd[1]);
 
+    setenv("COMP_LINE", rl_line_buffer, 1);
+    std::string point_str = std::to_string(rl_point);
+    setenv("COMP_POINT", point_str.c_str(), 1);
+
     execl(script.c_str(), script.c_str(), command.c_str(), current_word.c_str(), previous_word.c_str(), (char*)nullptr);
     perror(script.c_str());
     _exit(127);
@@ -175,10 +179,6 @@ char* script_generator(const char* text, int state){
     i = 0;
   }
   while(i < script_matches.size()){
-    //const std::string& s = script_matches[i++];
-    //if(s.rfind(text,0) == 0){
-    //  return strdup(s.c_str());
-    //}
     return strdup(script_matches[i++].c_str());
   }
   return nullptr;
@@ -194,9 +194,6 @@ char **my_completion(const char *text, int start, int end){
   std::string line(rl_line_buffer, start);
   bool is_new_word = start > 0 && std::isspace((unsigned char) rl_line_buffer[start - 1]);
   auto words = tokenize(line);
-  // if(is_new_word){
-  //   words.push_back("");
-  // }
 
   if(words.empty()){
     return nullptr;
@@ -210,14 +207,7 @@ char **my_completion(const char *text, int start, int end){
   }
   std::string current_word(text);
   std::string previous_word;
-  //if(words.size() >= 2){
-  //  current_word = words.back();
-    // if(words.size() == 2){
-    //   previous_word = command;
-    // }else{
-    //   previous_word = words[words.size()-2];
-    // }
-  //}
+
   if(!words.empty()){
     previous_word = words.back();
   }
@@ -241,9 +231,7 @@ int main() {
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
   while(true){
-    // std::cout << "$ " << std::flush;
-    // std::string input;
-    // std::getline(std::cin, input);
+
     char* line = readline("$ " );
     if(!line) break;
     std::string input(line);
@@ -253,10 +241,7 @@ int main() {
       break;
     }
     std::vector<std::string> wordcollector = tokenize(input);
-    //std::stringstream ss(input);
-    // while(getline(ss, part, ' ')){
-    //   wordcollector.push_back(part);
-    // }
+
     if(wordcollector.empty()) continue;
     std::string file;
     bool redirect = false;
@@ -322,7 +307,6 @@ int main() {
         
       }
       continue;
-      //implement echo with single quotes
 
     }else if(command == "exit"){
       return 0;
