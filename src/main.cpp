@@ -384,6 +384,7 @@ int main() {
         for(std::string i: process){
           std::cout << i;
         }
+        cout << "\n";
       }
 
     }else{
