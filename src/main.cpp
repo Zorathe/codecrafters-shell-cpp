@@ -209,11 +209,11 @@ char **my_completion(const char *text, int start, int end){
   std::string previous_word;
   if(words.size() >= 2){
     current_word = words.back();
-    if(words.size() == 2){
-      previous_word = command;
-    }else{
-      previous_word = words[words.size()-2];
-    }
+    // if(words.size() == 2){
+    //   previous_word = command;
+    // }else{
+    //   previous_word = words[words.size()-2];
+    // }
   }
   if(words.size() >= 3){
     previous_word = words[words.size()-2];
