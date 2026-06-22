@@ -149,7 +149,7 @@ std::vector<std::string> run_completer_script(const std::string &script, const s
 
   if(fp){
     char buffer[1024];
-    while(fgets(buffer,sizeof(buffer,fp))){
+    while(fgets(buffer,sizeof(buffer),fp)){
       std::string s(buffer);
 
       if(!s.empty() && s.back() == '\n'){
