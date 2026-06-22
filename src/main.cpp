@@ -149,7 +149,7 @@ std::vector<std::string> run_completer_script(const std::string &script, const s
     while(fgets(buffer,sizeof(buffer),fp)){
       std::string s(buffer);
 
-      if(!s.empty() && s.back() == '\n'){
+      if(!s.empty() && (s.back() == '\n' || s.back() == '\r)'){
         s.pop_back();
       }
 
@@ -172,8 +172,11 @@ char* script_generator(const char* text, int state){
   if(!state){
     i = 0;
   }
-  if(i < script_matches.size()){
-    return strdup(script_matches[i++].c_str());
+  while(i < script_matches.size()){
+    const std::string& s = script_matches[i++];
+    if(s.rfind(text,0) == 0){
+      return strdup(s.c_str());
+    }
   }
   return nullptr;
 }
@@ -182,7 +185,7 @@ char **my_completion(const char *text, int start, int end){
   (void)end;
 
   if(start == 0){
-    rl_attempted_completion_over = 1;
+    //rl_attempted_completion_over = 1;
     return rl_completion_matches(text,command_generator);
   }
   std::string line(rl_line_buffer, start);
@@ -213,12 +216,12 @@ char **my_completion(const char *text, int start, int end){
   script_matches = run_completer_script(it->second, command, current_word, previous_word);
 
   if(script_matches.empty()){
-    rl_attempted_completion_over = 1;
+    //rl_attempted_completion_over = 1;
     return nullptr;
   }
 
   rl_attempted_completion_over = 1;
-  rl_completion_append_character = ' ';
+  //rl_completion_append_character = ' ';
   return rl_completion_matches(text,script_generator);
 }
 
@@ -355,7 +358,7 @@ int main() {
     }else if(wordcollector[0] == "complete"){
     
       if(wordcollector.size() == 4 && wordcollector[1] == "-C"){
-          completion_script[wordcollector[3]] = wordcollector[2];
+          completion_script[wordcollector[3]] = std::filesystem::absolute(wordcollector[2]).string();
       }else if(wordcollector.size() == 3 && wordcollector[1] == "-p"){
         auto it = completion_script.find(wordcollector[2]);
         if(it != completion_script.end()){
@@ -369,7 +372,7 @@ int main() {
     }else{
       std::vector<char*> c_args;
       for(auto &a : wordcollector){
-        c_args.push_back(&a[0]);
+        c_args.push_back(const_cast<char*>(a.c_str()));
       }
       c_args.push_back(nullptr);
       pid_t pid = fork();
