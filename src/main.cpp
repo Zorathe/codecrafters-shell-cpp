@@ -175,10 +175,11 @@ char* script_generator(const char* text, int state){
     i = 0;
   }
   while(i < script_matches.size()){
-    const std::string& s = script_matches[i++];
-    if(s.rfind(text,0) == 0){
-      return strdup(s.c_str());
-    }
+    //const std::string& s = script_matches[i++];
+    //if(s.rfind(text,0) == 0){
+    //  return strdup(s.c_str());
+    //}
+    return strdup(script_matches[i++].c_str());
   }
   return nullptr;
 }
@@ -193,9 +194,9 @@ char **my_completion(const char *text, int start, int end){
   std::string line(rl_line_buffer, start);
   bool is_new_word = start > 0 && std::isspace((unsigned char) rl_line_buffer[start - 1]);
   auto words = tokenize(line);
-  if(is_new_word){
-    words.push_back("");
-  }
+  // if(is_new_word){
+  //   words.push_back("");
+  // }
 
   if(words.empty()){
     return nullptr;
@@ -207,18 +208,18 @@ char **my_completion(const char *text, int start, int end){
   if(it == completion_script.end()){
     return nullptr;
   }
-  std::string current_word;
+  std::string current_word(text);
   std::string previous_word;
-  if(words.size() >= 2){
-    current_word = words.back();
+  //if(words.size() >= 2){
+  //  current_word = words.back();
     // if(words.size() == 2){
     //   previous_word = command;
     // }else{
     //   previous_word = words[words.size()-2];
     // }
-  }
-  if(words.size() >= 3){
-    previous_word = words[words.size()-2];
+  //}
+  if(!words.empty()){
+    previous_word = words.back();
   }
   script_matches = run_completer_script(it->second, command, current_word, previous_word);
 
