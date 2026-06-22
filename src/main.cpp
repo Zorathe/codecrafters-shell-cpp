@@ -208,7 +208,7 @@ char **my_completion(const char *text, int start, int end){
     current_word = words.back();
   }
   if(words.size() >= 3){
-    previous_word = words[words.size()-2]''
+    previous_word = words[words.size()-2];
   }
   script_matches = run_completer_script(it->second, command, current_word, previous_word);
 
