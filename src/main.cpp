@@ -370,6 +370,8 @@ int main() {
             std::cout << "complete: invalid usage\n";
           }
       }
+    }else if(wordcollector[0] == "jobs"){
+      //implement jobs
     }else{
       std::vector<char*> c_args;
       for(auto &a : wordcollector){
