@@ -229,7 +229,7 @@ char **my_completion(const char *text, int start, int end){
   }
 
   rl_attempted_completion_over = 1;
-  rl_completion_append_character = '\0';
+  rl_completion_append_character = ' ';
   return rl_completion_matches(text,script_generator);
 }
 
