@@ -124,7 +124,7 @@ std::set<std::string> run_completer_script(const std::string &path, const std::s
   if(!pipe) return w;
   char buffer[256];
 
-  while(fgets(buffer,buffer.size(), pipe) != nullptr){
+  while(fgets(buffer,sizeof(buffer), pipe) != nullptr){
     std::string line = buffer;
     if(!line.empty() && line.back() == '\n'){
       line.pop_back();
