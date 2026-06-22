@@ -149,7 +149,7 @@ std::vector<std::string> run_completer_script(const std::string &script, const s
     while(fgets(buffer,sizeof(buffer),fp)){
       std::string s(buffer);
 
-      if(!s.empty() && (s.back() == '\n' || s.back() == '\r')){
+      while(!s.empty() && (s.back() == '\n' || s.back() == '\r')){
         s.pop_back();
       }
 
@@ -209,6 +209,11 @@ char **my_completion(const char *text, int start, int end){
   std::string previous_word;
   if(words.size() >= 2){
     current_word = words.back();
+    if(words.size() == 2){
+      previous_word = command;
+    }else{
+      previous_word = words[words.size()-2];
+    }
   }
   if(words.size() >= 3){
     previous_word = words[words.size()-2];
@@ -221,7 +226,7 @@ char **my_completion(const char *text, int start, int end){
   }
 
   rl_attempted_completion_over = 1;
-  //rl_completion_append_character = ' ';
+  rl_completion_append_character = ' ';
   return rl_completion_matches(text,script_generator);
 }
 
@@ -364,7 +369,12 @@ int main() {
         if(it != completion_script.end()){
           std::cout << "complete -C '" << it->second << "' " << wordcollector[2] << "\n";
         }else{
-          std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
+          if(wordcollector.size() >= 3){
+            std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
+          }else{
+            std::cout << "complete: invalid usage\n";
+          }
+          
         }
       }else{
         std::cout << "complete: " << wordcollector[2] << ": no completion specification\n";
