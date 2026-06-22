@@ -133,7 +133,7 @@ char **my_completion(const char *text, int start, int end){
   }
 
   std::string command = words[0];
-  auto it completion_scrip.find(command);
+  auto it completion_script.find(command);
 
   if(it == completion_script.end()){
     return nullptr;
