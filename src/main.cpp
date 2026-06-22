@@ -15,6 +15,8 @@
 #include <cstring>
 #include <cstdlib>
 
+static std::unordered_map<std::string,std::string> completion_script;
+static std::vector<std::string> script_matches;
 
 std::vector<std::string> tokenize(const std::string &input){
   //bool quoteOpened = false;
@@ -100,10 +102,10 @@ char *command_generator(const char *text, int state){
   if(!state){
     matches.clear();
     i = 0;
-    len = strlen(text);
+    
     auto cmds = get_all_commands();
     for(const auto &cmd : cmds){
-      if(strncmp(cmd.c_str(),text,len) == 0){
+      if(cmd.rfind(text,0) == 0){
         matches.push_back(cmd);
       }
     }
@@ -116,32 +118,98 @@ char *command_generator(const char *text, int state){
 
 char **my_completion(const char *text, int start, int end){
   (void)end;
+
+  rl_attempted_completion_over = 1;
+
   if(start == 0)
     return rl_completion_matches(text,command_generator);
+
+  std::string line(rl_line_buffer);
+
+  auto words = tokenize(line);
+
+  if(words.empty()){
+    return nullptr;
+  }
+
+  std::string command = words[0];
+  auto it completion_scrip.find(command);
+
+  if(it == completion_script.end()){
+    return nullptr;
+  }
+
+  script_matches = run_completer_script(it->second, command, text);
+
+  if(script_matches.empty()){
+    return nullptr;
+  }
+
+  return rl_completion_matches(text,script_generator);
+}
+
+std::vector<std::string> run_completer_script(const std::string &script, const std::string &command, const std::string &current_word){
+  std::vector<std::string> result;
+
+  int pipefd[2];
+
+  if(pipe(pipefd) == -1) return result;
+
+  pid_t pid = fork();
+
+  if(pid == -1){
+    close(pipefd[0]);
+    close(pipefd[1]);
+    return result;
+  }
+
+  if(pid == 0){
+    dup2(pipefd[1], STDOUT_FILENO);
+
+    close(pipefd[0]);
+    close(pipefd[1]);
+
+    execl(script.c_str(), script.c_str(), command.c_str(), current_word.c_str(), (char*)nullptr);
+
+    _exit(127);
+  }
+  close(pipefd[1]);
+
+  FILE* fp = fdopen(pipefd[0], "r");
+
+  if(fp){
+    char buffer[1024];
+    while(fgets(buffer,sizeof(buffer,fp))){
+      std::string s(buffer);
+
+      if(!s.empty() && s.back() == '\n'){
+        s.pop_back();
+      }
+
+      if(!s.empty()){
+        result.push_back(s);
+      }
+
+    }
+
+    fclose(fp);
+  }else{
+    close(pipefd[0]);
+  }
+  waitpid(pid, nullptr, 0);
+  return result;
+}
+
+char* script_generator(const char* text, int state){
+  static size_t i;
+  if(!state){
+    i = 0;
+  }
+  if(i < script_matches.size()){
+    return strdup(script_matches[i++].c_str());
+  }
   return nullptr;
 }
-
-std::set<std::string> run_completer_script(const std::string &path, const std::string &command, const std::string &word){
-  std::string l = "\"" + path + "\" " + command + " " + word;
-  FILE *pipe = popen(l.c_str(), "r");
-  std::set<std::string> w;
-  if(!pipe) return w;
-  char buffer[256];
-
-  while(fgets(buffer,sizeof(buffer), pipe) != nullptr){
-    std::string line = buffer;
-    if(!line.empty() && line.back() == '\n'){
-      line.pop_back();
-    }
-    if(!line.empty()){
-      w.insert(line);
-    }
-  }
-  pclose(pipe);
-  return w;
-}
-
-static std::unordered_map<std::string,std::string> completion_script;
 
 
 int main() {
@@ -188,27 +256,6 @@ int main() {
     for(int i = 0; i < wordcollector.size();i++){
       if(i) command += " ";
       command += wordcollector[i];
-      if(wordcollector[i] == "\t"){
-        if(file_completion && completion_script.count(base)){
-          std::string script = completion_script[base];
-          std::set<std::string> completions = run_completer_script(script,base,wordcollector[wordcollector.size()-1]);
-          if(completions.empty()){
-            std::cout << '\a';
-            std::cout.flush();
-          }else if(completions.size() == 1){
-            std::string completion = *completions.begin();
-            std::string to_add = completion;
-            if(completion.find(wordcollector[wordcollector.size()-1]) == 0){
-              to_add = completion.substr(wordcollector[wordcollector.size()-1].size());
-            }
-            to_add += " ";
-            
-            std::cout << to_add;
-            std::cout.flush();
-
-          }
-        }
-      }
     }
 
     if(wordcollector[0] == "echo"){
