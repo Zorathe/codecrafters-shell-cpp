@@ -192,15 +192,15 @@ int main() {
             std::cout << '\a';
             std::cout.flush();
           }else if(completions.size() == 1){
-            std::string completion - *completions.begin();
+            std::string completion = *completions.begin();
             std::string to_add = completion;
             if(completion.find(wordcollector[wordcollector.size()-1]) == 0){
               to_add = completion.substr(wordcollector[wordcollector.size()-1].size());
             }
             to_add += " ";
             
-            cout << to_add;
-            cout.flush();
+            std::cout << to_add;
+            std::cout.flush();
 
           }
         }
