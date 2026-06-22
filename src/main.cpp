@@ -170,6 +170,17 @@ std::vector<std::string> run_completer_script(const std::string &script, const s
   return result;
 }
 
+char* script_generator(const char* text, int state){
+  static size_t i;
+  if(!state){
+    i = 0;
+  }
+  if(i < script_matches.size()){
+    return strdup(script_matches[i++].c_str());
+  }
+  return nullptr;
+}
+
 char **my_completion(const char *text, int start, int end){
   (void)end;
 
@@ -202,16 +213,6 @@ char **my_completion(const char *text, int start, int end){
   return rl_completion_matches(text,script_generator);
 }
 
-char* script_generator(const char* text, int state){
-  static size_t i;
-  if(!state){
-    i = 0;
-  }
-  if(i < script_matches.size()){
-    return strdup(script_matches[i++].c_str());
-  }
-  return nullptr;
-}
 
 
 int main() {
