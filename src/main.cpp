@@ -262,6 +262,12 @@ int main() {
       command += wordcollector[i];
     }
 
+    bool run_in_back = false;
+    if(wordcollector.back() == "&"){
+      run_in_back = true;
+      wordcollector.pop_back();
+    }
+
     if(wordcollector[0] == "echo"){
       
       int saved_stdout = -1;
@@ -407,7 +413,12 @@ int main() {
         std::cerr << c_args[0] << ": command not found\n";
         exit(127);
       }else if(pid > 0){
-        waitpid(pid, nullptr, 0);
+        if(run_in_back){
+          std::cout << "[1] " << pid << "\n";
+        }else{
+          waitpid(pid, nullptr, 0);
+        }
+
       }else{
         perror("fork");
       }
