@@ -17,6 +17,7 @@
 
 static std::unordered_map<std::string,std::string> completion_script;
 static std::vector<std::string> script_matches;
+static std::vector<std::string> process;
 
 std::vector<std::string> tokenize(const std::string &input){
   //bool quoteOpened = false;
@@ -261,7 +262,6 @@ int main() {
       if(i) command += " ";
       command += wordcollector[i];
     }
-    std::vector<std::string> process;
     bool run_in_back = false;
     if(wordcollector.back() == "&"){
       run_in_back = true;
