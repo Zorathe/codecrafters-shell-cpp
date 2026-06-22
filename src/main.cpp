@@ -149,7 +149,7 @@ std::vector<std::string> run_completer_script(const std::string &script, const s
     while(fgets(buffer,sizeof(buffer),fp)){
       std::string s(buffer);
 
-      if(!s.empty() && (s.back() == '\n' || s.back() == '\r)'){
+      if(!s.empty() && (s.back() == '\n' || s.back() == '\r')){
         s.pop_back();
       }
 
