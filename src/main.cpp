@@ -148,7 +148,7 @@ int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
-  bool file_completion = false;
+  bool file_completion = true;
 
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
