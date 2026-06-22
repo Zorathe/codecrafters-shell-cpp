@@ -261,11 +261,12 @@ int main() {
       if(i) command += " ";
       command += wordcollector[i];
     }
-
+    std::vector<std::string> process;
     bool run_in_back = false;
     if(wordcollector.back() == "&"){
       run_in_back = true;
       wordcollector.pop_back();
+      process.push_back(command);
     }
 
     if(wordcollector[0] == "echo"){
@@ -378,6 +379,13 @@ int main() {
       }
     }else if(wordcollector[0] == "jobs"){
       //implement jobs
+      if(process.size() > 0){
+        std::cout << "[" << process.size() << "]+  Running                 ";
+        for(std::string i: process){
+          std::cout << process[i];
+        }
+      }
+
     }else{
       std::vector<char*> c_args;
       for(auto &a : wordcollector){
