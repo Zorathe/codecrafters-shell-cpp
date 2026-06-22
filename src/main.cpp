@@ -380,11 +380,20 @@ int main() {
     }else if(wordcollector[0] == "jobs"){
       //implement jobs
       if(process.size() > 0){
-        std::cout << "[" << process.size() << "]+  Running                 ";
-        for(std::string i: process){
-          std::cout << i;
+//        std::cout << "[" << process.size() << "]+  Running                 ";
+        for(int i = 0; i < process.size(); i++){
+          std::cout << "[" << i+1 << "]";
+          if(i == process.size()-1){
+            std::cout << "+";
+          }else if(i == process.size()-2){
+            std::cout << "-";
+          }
+          std::cout << "  Running                 " << process[i] << "\n";
         }
-        std::cout << "\n";
+  //      for(std::string i: process){
+    //      std::cout << i;
+      //  }
+       // std::cout << "\n";
       }
 
     }else{
