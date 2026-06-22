@@ -115,7 +115,7 @@ char *command_generator(const char *text, int state){
   return nullptr;
 }
 
-std::vector<std::string> run_completer_script(const std::string &script, const std::string &command, const std::string &current_word){
+std::vector<std::string> run_completer_script(const std::string &script, const std::string &command, const std::string &current_word, const std::string &previous_word){
   std::vector<std::string> result;
 
   int pipefd[2];
@@ -136,7 +136,7 @@ std::vector<std::string> run_completer_script(const std::string &script, const s
     close(pipefd[0]);
     close(pipefd[1]);
 
-    execl(script.c_str(), script.c_str(), command.c_str(), current_word.c_str(), (char*)nullptr);
+    execl(script.c_str(), script.c_str(), command.c_str(), current_word.c_str(), previous_word.c_str(), (char*)nullptr);
 
     _exit(127);
   }
@@ -185,7 +185,7 @@ char **my_completion(const char *text, int start, int end){
     rl_attempted_completion_over = 1;
     return rl_completion_matches(text,command_generator);
   }
-  std::string line(rl_line_buffer);
+  std::string line(rl_line_buffer, start);
   bool is_new_word = start > 0 && std::isspace((unsigned char) rl_line_buffer[start - 1]);
   auto words = tokenize(line);
   if(is_new_word){
@@ -203,12 +203,14 @@ char **my_completion(const char *text, int start, int end){
     return nullptr;
   }
   std::string current_word;
-
+  std::string previous_word;
   if(words.size() >= 2){
     current_word = words.back();
   }
-
-  script_matches = run_completer_script(it->second, command, current_word);
+  if(words.size() >= 3){
+    previous_word = words[words.size()-2]''
+  }
+  script_matches = run_completer_script(it->second, command, current_word, previous_word);
 
   if(script_matches.empty()){
     rl_attempted_completion_over = 1;
@@ -219,8 +221,6 @@ char **my_completion(const char *text, int start, int end){
   rl_completion_append_character = ' ';
   return rl_completion_matches(text,script_generator);
 }
-
-
 
 int main() {
   // Flush after every std::cout / std:cerr
