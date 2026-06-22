@@ -181,10 +181,10 @@ char* script_generator(const char* text, int state){
 char **my_completion(const char *text, int start, int end){
   (void)end;
 
-  if(start == 0)
+  if(start == 0){
     rl_attempted_completion_over = 1;
     return rl_completion_matches(text,command_generator);
-
+  }
   std::string line(rl_line_buffer);
   bool is_new_word = start > 0 && std::isspace((unsigned char) rl_line_buffer[start - 1]);
   auto words = tokenize(line);
@@ -207,7 +207,7 @@ char **my_completion(const char *text, int start, int end){
   if(words.size() >= 2){
     current_word = words.back();
   }
-  
+
   script_matches = run_completer_script(it->second, command, current_word);
 
   if(script_matches.empty()){
