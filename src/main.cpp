@@ -378,9 +378,7 @@ int main() {
           }
       }
     }else if(wordcollector[0] == "jobs"){
-      //implement jobs
       if(process.size() > 0){
-//        std::cout << "[" << process.size() << "]+  Running                 ";
         for(int i = 0; i < process.size(); i++){
           std::cout << "[" << i+1 << "]";
           if(i == process.size()-1){
@@ -390,10 +388,6 @@ int main() {
           }
           std::cout << "  Running                 " << process[i] << "\n";
         }
-  //      for(std::string i: process){
-    //      std::cout << i;
-      //  }
-       // std::cout << "\n";
       }
 
     }else{
@@ -434,7 +428,11 @@ int main() {
         if(run_in_back){
           std::cout << "[" << process.size() << "] " << pid << "\n";
         }else{
-          waitpid(pid, nullptr, 0);
+          int status;
+          waitpid(pid, &status, WNOHANG);
+          if(WIFEXITED(status)){
+            int exit_status = WEXITSTATUS(status);
+          }
         }
 
       }else{
