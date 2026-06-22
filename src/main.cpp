@@ -382,7 +382,7 @@ int main() {
       if(process.size() > 0){
         std::cout << "[" << process.size() << "]+  Running                 ";
         for(std::string i: process){
-          std::cout << process[i];
+          std::cout << i;
         }
       }
 
