@@ -432,7 +432,7 @@ int main() {
         exit(127);
       }else if(pid > 0){
         if(run_in_back){
-          std::cout << "[1] " << pid << "\n";
+          std::cout << "[" << process.size() << "] " << pid << "\n";
         }else{
           waitpid(pid, nullptr, 0);
         }
