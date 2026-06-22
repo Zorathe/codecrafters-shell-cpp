@@ -116,13 +116,35 @@ char **my_completion(const char *text, int start, int end){
     return rl_completion_matches(text,command_generator);
   return nullptr;
 }
+
+set<string> run_completer_script(const string &path, const string &command, const string &word){
+  std::string l = "\"" + path + "\"" + command + " " + word;
+  FILE *pipe popen(l.c_str(), "r");
+  set<string> w;
+  if(!pipe) return w;
+  char buffer[256];
+
+  while(fgets(buffer,buffer.size(), pipe) != nullptr){
+    std::string line = buffer;
+    if(!line.empty() && line.back() == '\n'){
+      line.pop_back();
+    }
+    if(!line.empty()){
+      w.insert(line);
+    }
+  }
+  pclose(pipe);
+  return w;
+}
+
 static std::unordered_map<std::string,std::string> completion_script;
+
 
 int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;
-
+  bool file_completion = false;
 
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
@@ -158,9 +180,31 @@ int main() {
     }
 
     std::string command;
+    std::string base = wordcollector[0];
     for(int i = 0; i < wordcollector.size();i++){
       if(i) command += " ";
       command += wordcollector[i];
+      if(wordcollector[i] == "\t"){
+        if(file_completion && completion_script.count(base)){
+          std::string script = completion_script[base];
+          std::set<std::string> completions = run_completer_script(script,base,wordcollector[wordcollector.size()-1]);
+          if(completions.empty()){
+            std::cout << '\a';
+            std::cout.flush();
+          }else if(completions.size() == 1){
+            std::string completion - *completions.begin();
+            std::string to_add = completion;
+            if(completion.find(wordcollector[wordcollector.size()-1]) == 0){
+              to_add = completion.substr(wordcollector[wordcollector.size()-1].size());
+            }
+            to_add += " ";
+            
+            cout << to_add;
+            cout.flush();
+            
+          }
+        }
+      }
     }
 
     if(wordcollector[0] == "echo"){
