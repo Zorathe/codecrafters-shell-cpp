@@ -117,10 +117,10 @@ char **my_completion(const char *text, int start, int end){
   return nullptr;
 }
 
-std::set<string> run_completer_script(const std::string &path, const std::string &command, const std::string &word){
+std::set<std::string> run_completer_script(const std::string &path, const std::string &command, const std::string &word){
   std::string l = "\"" + path + "\"" + command + " " + word;
   FILE *pipe popen(l.c_str(), "r");
-  set<string> w;
+  std::set<std::string> w;
   if(!pipe) return w;
   char buffer[256];
 
