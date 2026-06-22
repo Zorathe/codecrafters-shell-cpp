@@ -116,37 +116,7 @@ char *command_generator(const char *text, int state){
   return nullptr;
 }
 
-char **my_completion(const char *text, int start, int end){
-  (void)end;
 
-  rl_attempted_completion_over = 1;
-
-  if(start == 0)
-    return rl_completion_matches(text,command_generator);
-
-  std::string line(rl_line_buffer);
-
-  auto words = tokenize(line);
-
-  if(words.empty()){
-    return nullptr;
-  }
-
-  std::string command = words[0];
-  auto it = completion_script.find(command);
-
-  if(it == completion_script.end()){
-    return nullptr;
-  }
-
-  script_matches = run_completer_script(it->second, command, text);
-
-  if(script_matches.empty()){
-    return nullptr;
-  }
-
-  return rl_completion_matches(text,script_generator);
-}
 
 std::vector<std::string> run_completer_script(const std::string &script, const std::string &command, const std::string &current_word){
   std::vector<std::string> result;
@@ -198,6 +168,38 @@ std::vector<std::string> run_completer_script(const std::string &script, const s
   }
   waitpid(pid, nullptr, 0);
   return result;
+}
+
+char **my_completion(const char *text, int start, int end){
+  (void)end;
+
+  rl_attempted_completion_over = 1;
+
+  if(start == 0)
+    return rl_completion_matches(text,command_generator);
+
+  std::string line(rl_line_buffer);
+
+  auto words = tokenize(line);
+
+  if(words.empty()){
+    return nullptr;
+  }
+
+  std::string command = words[0];
+  auto it = completion_script.find(command);
+
+  if(it == completion_script.end()){
+    return nullptr;
+  }
+
+  script_matches = run_completer_script(it->second, command, text);
+
+  if(script_matches.empty()){
+    return nullptr;
+  }
+
+  return rl_completion_matches(text,script_generator);
 }
 
 char* script_generator(const char* text, int state){
