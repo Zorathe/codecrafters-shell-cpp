@@ -361,7 +361,6 @@ int main() {
     }
     
     cleanup_jobs();
-    print_jobs();
     std::vector<std::string> wordcollector = tokenize(input);
 
     if(wordcollector.empty()) continue;
@@ -578,7 +577,7 @@ int main() {
       }else{
         perror("fork");
       }
-      
+      print_jobs();
     }
   }
 
