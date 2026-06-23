@@ -243,7 +243,7 @@ char **my_completion(const char *text, int start, int end){
 
 std::pair<const Job*, const Job*> get_marks(){
   int last = -1;
-  inr second_last = -1;
+  int second_last = -1;
 
   for(auto &job: jobs){
     if(!job.done){
