@@ -14,6 +14,7 @@
 #include <vector>
 #include <cstring>
 #include <cstdlib>
+#include <errno.h>
 
 static std::unordered_map<std::string,std::string> completion_script;
 static std::vector<std::string> script_matches;
@@ -22,7 +23,6 @@ struct Job {
   int id;
   pid_t pid;
   std::string command;
-  bool done;
 };
 
 static std::vector<Job> jobs;
@@ -243,7 +243,6 @@ void reap_jobs(){
       pid_t ret = waitpid(jobs[i].pid, &status, WNOHANG);
 
       if(ret == jobs[i].pid && (WIFEXITED(status) || WIFSIGNALED(status))){
-        jobs[i].done = true;
         std::cout << "[" << jobs[i].id << "]";
         if(i == jobs.size()-1){
           std::cout << "+";
@@ -253,8 +252,7 @@ void reap_jobs(){
         
         std::cout << "  Done                 " << jobs[i].command << "\n";
         remove_list.push_back(i);
-      }else if(ret == -1){
-        jobs[i].done = true;
+      }else if(ret == -1 && errno == ECHILD){
         remove_list.push_back(i);
       }
     }
@@ -433,8 +431,7 @@ int main() {
       //     job.done = true;
       //   }
       // }
-      reap_jobs();
-      std::vector<int> remove_list;
+      //std::vector<int> remove_list;
       for(int i = 0; i < jobs.size(); i++){
         std::cout << "[" << jobs[i].id << "]";
         if(i == jobs.size()-1){
@@ -442,17 +439,15 @@ int main() {
         }else if(i == jobs.size()-2){
           std::cout << "-";
         }
-        if(!jobs[i].done){
         //   std::cout << "  Done                 " << jobs[i].command << "\n";
         //   remove_list.push_back(i);
         // }else{
           std::cout << "  Running                 " << jobs[i].command << "\n";
-        }
       }
 
-      for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
-        jobs.erase(jobs.begin() + *it);
-      }
+      // for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
+      //   jobs.erase(jobs.begin() + *it);
+      // }
 
     }else{
       std::vector<char*> c_args;
