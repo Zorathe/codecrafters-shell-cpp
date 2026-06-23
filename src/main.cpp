@@ -23,6 +23,7 @@ struct Job {
   int id;
   pid_t pid;
   std::string command;
+  bool done;
 };
 
 static std::vector<Job> jobs;
@@ -235,6 +236,20 @@ char **my_completion(const char *text, int start, int end){
   return rl_completion_matches(text,script_generator);
 }
 
+void update_jobs(){
+  for(auto &job: jobs){
+    if(job.done){
+      continue;
+    }
+    int status;
+    pid_t ret = waitpid(job.pid, &status, WNOHANG);
+
+    if(ret == job.pid){
+      job.done = true;
+    }
+  }
+}
+
 void reap_jobs(){
     std::vector<int> remove_list;
 
@@ -252,9 +267,9 @@ void reap_jobs(){
         
         std::cout << "  Done                 " << jobs[i].command << "\n";
         remove_list.push_back(i);
-      }/*else if(ret == -1 && errno == ECHILD){
-        remove_list.push_back(i);
-      }*/
+      }else if(ret == -1 && errno == ECHILD){
+        jobs[i].done = true;
+      }
     }
 
     for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
@@ -271,7 +286,6 @@ int main() {
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
   while(true){
-
     reap_jobs();
 
     char* line = readline("$ " );
@@ -432,6 +446,7 @@ int main() {
       //   }
       // }
       //std::vector<int> remove_list;
+      update_jobs();
       for(int i = 0; i < jobs.size(); i++){
         std::cout << "[" << jobs[i].id << "]";
         if(i == jobs.size()-1){
@@ -439,10 +454,12 @@ int main() {
         }else if(i == jobs.size()-2){
           std::cout << "-";
         }
-        //   std::cout << "  Done                 " << jobs[i].command << "\n";
+        if(jobs[i].done)
+          std::cout << "  Done                 " << jobs[i].command << "\n";
         //   remove_list.push_back(i);
-        // }else{
+        }else{
           std::cout << "  Running                 " << jobs[i].command << "\n";
+        }
       }
 
       // for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
