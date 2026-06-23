@@ -389,6 +389,16 @@ int main() {
       }
     }else if(wordcollector[0] == "jobs"){
       std::vector<int> remove_list;
+      for(auto &job: jobs){
+        int status;
+        pid_t ret = waitpid(job.pid, &status, WNOHANG);
+
+        if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
+          job.done = true;
+        }else if(ret == -1){
+          job.done = true;
+        }
+      }
 
       for(int i = 0; i < jobs.size(); i++){
         std::cout << "[" << jobs[i].id << "]";
@@ -450,15 +460,7 @@ int main() {
         }else{
           int status;
           waitpid(pid, &status, 0);
-          for(auto &job: jobs){
-            pid_t ret = waitpid(job.pid, &status, WNOHANG);
-
-            if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
-              job.done = true;
-            }else if(ret == -1){
-              job.done = true;
-            }
-          }
+          
           if(WIFEXITED(status)){
             int exit_status = WEXITSTATUS(status);
             
