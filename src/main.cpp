@@ -18,6 +18,8 @@
 static std::unordered_map<std::string,std::string> completion_script;
 static std::vector<std::string> script_matches;
 static std::vector<std::string> process;
+static std::unordered_map<std::string task, bool is_running> process_list;
+static int task_running = 0;
 
 std::vector<std::string> tokenize(const std::string &input){
   //bool quoteOpened = false;
@@ -267,6 +269,7 @@ int main() {
       run_in_back = true;
       wordcollector.pop_back();
       process.push_back(command);
+      process_list[command.substr(0,command.size()-1)] = true;
     }
 
     if(wordcollector[0] == "echo"){
@@ -386,7 +389,12 @@ int main() {
           }else if(i == process.size()-2){
             std::cout << "-";
           }
-          std::cout << "  Running                 " << process[i] << "\n";
+          if(process_list[process[i]]){
+            std::cout << "  Running                 " << process[i] << "\n";
+          }else{
+            std::cout << "  Done                 " << process_list[process[i]] << "\n";
+          }
+            
         }
       }
 
@@ -432,6 +440,8 @@ int main() {
           waitpid(pid, &status, WNOHANG);
           if(WIFEXITED(status)){
             int exit_status = WEXITSTATUS(status);
+            process_list[process[task_running]] = false;
+            task_running++;
           }
         }
 
