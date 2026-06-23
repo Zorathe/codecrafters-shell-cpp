@@ -243,22 +243,24 @@ int main() {
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
   while(true){
-      for(int i = 0; i < jobs.size(); i++){
+    std::vector<int> remove_list;
+    for(int i = 0; i < jobs.size(); i++){
+      if(jobs[i].done){
         std::cout << "[" << jobs[i].id << "]";
         if(i == jobs.size()-1){
           std::cout << "+";
         }else if(i == jobs.size()-2){
           std::cout << "-";
         }
-        if(jobs[i].done){
+        
           std::cout << "  Done                 " << jobs[i].command << "\n";
           remove_list.push_back(i);
         }
-      }
+    }
 
-      for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
-        jobs.erase(jobs.begin() + *it);
-      }
+    for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
+      jobs.erase(jobs.begin() + *it);
+    }
 
     char* line = readline("$ " );
     if(!line) break;
@@ -404,7 +406,6 @@ int main() {
           }
       }
     }else if(wordcollector[0] == "jobs"){
-      std::vector<int> remove_list;
       for(auto &job: jobs){
         int status;
         pid_t ret = waitpid(job.pid, &status, WNOHANG);
