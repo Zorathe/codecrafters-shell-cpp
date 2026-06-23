@@ -458,7 +458,7 @@ int main() {
           std::cout << "  Done                 " << jobs[i].command << "\n";
         //   remove_list.push_back(i);
         }else{
-          std::cout << "  Running                 " << jobs[i].command << "&\n";
+          std::cout << "  Running                 " << jobs[i].command << " &\n";
         }
       }
 
