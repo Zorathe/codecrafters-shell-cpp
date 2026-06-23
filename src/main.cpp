@@ -245,18 +245,12 @@ int main() {
   while(true){
     std::vector<int> remove_list;
 
-    for(auto &job: jobs){
-      int status;
-      pid_t ret = waitpid(job.pid, &status, WNOHANG);
-
-      if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
-        job.done = true;
-      }else if(ret == -1){
-        job.done = true;
-      }
-    }
     for(int i = 0; i < jobs.size(); i++){
-      if(jobs[i].done){
+      int status;
+      pid_t ret = waitpid(job[i].pid, &status, WNOHANG);
+
+      if(ret == job[i].pid && (WIFEXITED(status) || WIFSIGNALED(status))){
+        job.done = true;
         std::cout << "[" << jobs[i].id << "]";
         if(i == jobs.size()-1){
           std::cout << "+";
@@ -266,7 +260,9 @@ int main() {
         
           std::cout << "  Done                 " << jobs[i].command << "\n";
           remove_list.push_back(i);
-        }
+      }else if(ret == -1){
+        job.done = true;
+      }
     }
 
     for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
