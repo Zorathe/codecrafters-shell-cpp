@@ -499,6 +499,8 @@ int main() {
           }
       }
     }else if(wordcollector[0] == "jobs"){
+      print_jobs();
+
       // for(auto &job: jobs){
       //   int status;
       //   pid_t ret = waitpid(job.pid, &status, WNOHANG);
@@ -577,7 +579,6 @@ int main() {
         perror("fork");
       }
     }
-    print_jobs();
 
   }
 
