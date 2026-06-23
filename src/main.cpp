@@ -247,7 +247,7 @@ int main() {
 
     for(int i = 0; i < jobs.size(); i++){
       int status;
-      pid_t ret = waitpid(job[i].pid, &status, WNOHANG);
+      pid_t ret = waitpid(jobs[i].pid, &status, WNOHANG);
 
       if(ret == job[i].pid && (WIFEXITED(status) || WIFSIGNALED(status))){
         job.done = true;
@@ -431,10 +431,10 @@ int main() {
         }else if(i == jobs.size()-2){
           std::cout << "-";
         }
-        if(jobs[i].done){
-          std::cout << "  Done                 " << jobs[i].command << "\n";
-          remove_list.push_back(i);
-        }else{
+        if(!jobs[i].done){
+        //   std::cout << "  Done                 " << jobs[i].command << "\n";
+        //   remove_list.push_back(i);
+        // }else{
           std::cout << "  Running                 " << jobs[i].command << "\n";
         }
       }
