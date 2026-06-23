@@ -245,10 +245,10 @@ std::pair<const Job*, const Job*> get_marks(){
   int last = -1;
   int second_last = -1;
 
-  for(auto &job: jobs){
-    if(!job.done){
+  for(int i = 0; i < jobs.size(); i++){
+    if(!jobs[i].done){
       second_last = last;
-      last = &job;
+      last = i;
     }
   }
   return {last, second_last};
