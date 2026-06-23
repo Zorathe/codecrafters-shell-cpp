@@ -235,14 +235,7 @@ char **my_completion(const char *text, int start, int end){
   return rl_completion_matches(text,script_generator);
 }
 
-int main() {
-  // Flush after every std::cout / std:cerr
-  std::cout << std::unitbuf;
-  std::cerr << std::unitbuf;
-
-  rl_attempted_completion_function = my_completion;
-  rl_bind_key('\t', rl_complete);
-  while(true){
+void reap_jobs(){
     std::vector<int> remove_list;
 
     for(int i = 0; i < jobs.size(); i++){
@@ -258,16 +251,30 @@ int main() {
           std::cout << "-";
         }
         
-          std::cout << "  Done                 " << jobs[i].command << "\n";
-          remove_list.push_back(i);
+        std::cout << "  Done                 " << jobs[i].command << "\n";
+        remove_list.push_back(i);
       }else if(ret == -1){
         jobs[i].done = true;
+        remove_list.push_back(i);
       }
     }
 
     for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
       jobs.erase(jobs.begin() + *it);
     }
+
+}
+
+int main() {
+  // Flush after every std::cout / std:cerr
+  std::cout << std::unitbuf;
+  std::cerr << std::unitbuf;
+
+  rl_attempted_completion_function = my_completion;
+  rl_bind_key('\t', rl_complete);
+  while(true){
+
+    reap_jobs();
 
     char* line = readline("$ " );
     if(!line) break;
@@ -296,6 +303,9 @@ int main() {
     if(wordcollector.back() == "&"){
       run_in_back = true;
       wordcollector.pop_back();
+      if(wordcollector.empty()){
+        continue;
+      }
     }
 
     std::string command;
