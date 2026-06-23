@@ -267,15 +267,16 @@ int main() {
       wordcollector.pop_back();
     }
 
-    std::string command;
-    for(int i = 0; i < wordcollector.size();i++){
-      if(i) command += " ";
-      command += wordcollector[i];
-    }
     bool run_in_back = false;
     if(wordcollector.back() == "&"){
       run_in_back = true;
       wordcollector.pop_back();
+    }
+
+    std::string command;
+    for(int i = 0; i < wordcollector.size();i++){
+      if(i) command += " ";
+      command += wordcollector[i];
     }
 
     if(wordcollector[0] == "echo"){
@@ -389,14 +390,6 @@ int main() {
     }else if(wordcollector[0] == "jobs"){
       std::vector<int> remove_list;
 
-      for(auto &job : jobs){
-        int status;
-        pid_t ret = waitpid(job.pid, &status, WNOHANG);
-        
-        if(ret == job.pid){
-          job.done = true;
-        }
-      }
       for(int i = 0; i < jobs.size(); i++){
         std::cout << "[" << jobs[i].id << "]";
         if(i == jobs.size()-1){
@@ -406,6 +399,7 @@ int main() {
         }
         if(jobs[i].done){
           std::cout << "  Done                 " << jobs[i].command << "\n";
+          remove_list.push_back(i);
         }else{
           std::cout << "  Running                 " << jobs[i].command << "\n";
         }
@@ -452,13 +446,14 @@ int main() {
       }else if(pid > 0){
         if(run_in_back){
           jobs.push_back(Job{next_job_id++, pid, command, false});
-          std::cout << "[" << next_job_id << "] " << pid << "\n";
+          std::cout << "[" << jobs.back().id << "] " << pid << "\n";
         }else{
           int status;
+          waitpid(pid, &status, 0);
           for(auto &job: jobs){
             pid_t ret = waitpid(job.pid, &status, WNOHANG);
 
-            if(ret == job.pid){
+            if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
               job.done = true;
             }else if(ret == -1){
               job.done = true;
