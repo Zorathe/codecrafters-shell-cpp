@@ -359,8 +359,9 @@ int main() {
     if(input == "exit"){
       break;
     }
-    print_jobs();
+    
     cleanup_jobs();
+    print_jobs();
     std::vector<std::string> wordcollector = tokenize(input);
 
     if(wordcollector.empty()) continue;
