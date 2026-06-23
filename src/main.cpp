@@ -241,7 +241,7 @@ char **my_completion(const char *text, int start, int end){
   return rl_completion_matches(text,script_generator);
 }
 
-std::pair<const Job*, const Job*> get_marks(){
+std::pair<int, int> get_marks(){
   int last = -1;
   int second_last = -1;
 
