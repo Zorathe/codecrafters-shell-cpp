@@ -248,7 +248,7 @@ std::pair<int, int> get_marks(){
   for(int i = 0; i < jobs.size(); i++){
     if(!jobs[i].done){
       second_last = last;
-      last = jobs[i].id;
+      last = i;
     }
   }
   return {last, second_last};
@@ -261,9 +261,9 @@ void print_jobs(){
 
     std::cout << "[" << jobs[i].id << "]";
 
-    if(jobs[i].id == last){
+    if(i == last){
       std::cout << "+";
-    }else if(jobs[i].id == second_last){
+    }else if(i == second_last){
       std::cout << "-";
     }
     if(jobs[i].done){
