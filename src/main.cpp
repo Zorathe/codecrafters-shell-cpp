@@ -18,8 +18,18 @@
 static std::unordered_map<std::string,std::string> completion_script;
 static std::vector<std::string> script_matches;
 static std::vector<std::string> process;
-static std::unordered_map<std::string, bool> process_list;
-static int task_running = 0;
+
+
+struct Job {
+  int id;
+  pid_t pid;
+  std::string cmd;
+  bool done;
+}
+
+static std::vector<Job> jobs;
+int next_job_id = 1;
+
 
 std::vector<std::string> tokenize(const std::string &input){
   //bool quoteOpened = false;
@@ -268,8 +278,7 @@ int main() {
     if(wordcollector.back() == "&"){
       run_in_back = true;
       wordcollector.pop_back();
-      process.push_back(command);
-      process_list[command] = true;
+      jobs.push_back(next_job_id++, pid, command, false);
     }
 
     if(wordcollector[0] == "echo"){
@@ -381,21 +390,23 @@ int main() {
           }
       }
     }else if(wordcollector[0] == "jobs"){
-      if(process.size() > 0){
-        for(int i = 0; i < process.size(); i++){
-          std::cout << "[" << i+1 << "]";
-          if(i == process.size()-1){
-            std::cout << "+";
-          }else if(i == process.size()-2){
-            std::cout << "-";
-          }
-          if(process_list[process[i]]){
-            std::cout << "  Running                 " << process[i] << "\n";
-          }else{
-            std::cout << "  Done                 " << process[i] << "\n";
-          }
-            
+      std::vector<int> remove_list;
+      for(int i = 0; i < jobs.size(); i++){
+        std::cout << "[" << jobs[i].id << "]";
+        if(i == jobs.size()-1){
+          std::cout << "+";
+        }else if(i == jobs.size()-2){
+          std::cout << "-";
         }
+        if(jobs[i].done){
+          std::cout << "  Done                 " << jobs[i].command << "\n";
+        }else{
+          std::cout << "  Running                 " << jobs[i].command << "\n";
+        }
+      }
+
+      for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
+        jobs.erase(jobs.begin() + *it);
       }
 
     }else{
@@ -435,16 +446,21 @@ int main() {
       }else if(pid > 0){
         if(run_in_back){
           std::cout << "[" << process.size() << "] " << pid << "\n";
-        }//else{
-          int status;
-          waitpid(pid, &status, WNOHANG);
+        }else{
+          for(auto &job: jobs){
+            int status;
+            pid_t ret = waitpid(job.pid, &status, WNOHANG);
+
+            if(ret == job.pid){
+              job.done = true;
+            }
+          }
           if(WIFEXITED(status)){
             int exit_status = WEXITSTATUS(status);
-            process_list[process[task_running]] = false;
-            task_running++;
+            
            // std::cout << "Task was done" << std::endl;
           }
-        //}
+        }
 
       }else{
         perror("fork");
