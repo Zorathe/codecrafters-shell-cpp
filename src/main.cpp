@@ -15,6 +15,10 @@
 #include <cstring>
 #include <cstdlib>
 #include <errno.h>
+#include <deque>
+#include <algorithm>
+
+
 
 static std::unordered_map<std::string,std::string> completion_script;
 static std::vector<std::string> script_matches;
@@ -238,8 +242,8 @@ char **my_completion(const char *text, int start, int end){
 }
 
 std::pair<const Job*, const Job*> get_marks(){
-  const Job* last = nullptr;
-  const Job* second_last = nullptr;
+  int last = -1;
+  inr second_last = -1;
 
   for(auto &job: jobs){
     if(!job.done){
