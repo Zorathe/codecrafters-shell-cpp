@@ -254,7 +254,6 @@ void print_jobs(){
   auto [last, second_last] = get_marks();
 
   for(auto &job: jobs){
-    if(!job.done) continue;
 
     std::cout << "[" << job.id << "]";
 
@@ -263,7 +262,12 @@ void print_jobs(){
     }else if(&job == second_last){
       std::cout << "-";
     }
-    std::cout << "  Done                 " << job.command << "\n";
+    if(job.done){
+      std::cout << "  Done                 " << job.command << "\n";
+    }else{
+      std::cout << "  Running                 " << job.command << " &\n";
+    }
+    
 
   }
 }
@@ -272,19 +276,19 @@ void cleanup_jobs(){
   jobs.erase(std::remove_if(jobs.begin(), jobs.end(), [](const Job &j) {return j.done;}), jobs.end());
 }
 
-void update_jobs(){
-  for(auto &job: jobs){
-    if(job.done){
-      continue;
-    }
-    int status;
-    pid_t ret = waitpid(job.pid, &status, WNOHANG);
+// void update_jobs(){
+//   for(auto &job: jobs){
+//     if(job.done){
+//       continue;
+//     }
+//     int status;
+//     pid_t ret = waitpid(job.pid, &status, WNOHANG);
 
-    if(ret == job.pid){
-      job.done = true;
-    }
-  }
-}
+//     if(ret == job.pid){
+//       job.done = true;
+//     }
+//   }
+// }
 
 void reap_jobs(){
 
@@ -352,6 +356,7 @@ int main() {
       break;
     }
     print_jobs();
+    cleanup_jobs();
     std::vector<std::string> wordcollector = tokenize(input);
 
     if(wordcollector.empty()) continue;
