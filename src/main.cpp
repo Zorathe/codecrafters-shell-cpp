@@ -25,7 +25,7 @@ struct Job {
   pid_t pid;
   std::string cmd;
   bool done;
-}
+};
 
 static std::vector<Job> jobs;
 int next_job_id = 1;
