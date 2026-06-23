@@ -269,7 +269,7 @@ int main() {
       run_in_back = true;
       wordcollector.pop_back();
       process.push_back(command);
-      process_list[command.substr(0,command.size()-1)] = true;
+      process_list[command] = true;
     }
 
     if(wordcollector[0] == "echo"){
