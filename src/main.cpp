@@ -23,10 +23,11 @@ struct Job {
   int id;
   pid_t pid;
   std::string command;
-  bool done;
+  bool running = true;
+  bool done = false;
 };
 
-static std::vector<Job> jobs;
+static std::deque<Job> jobs;
 int next_job_id = 1;
 
 
@@ -236,6 +237,41 @@ char **my_completion(const char *text, int start, int end){
   return rl_completion_matches(text,script_generator);
 }
 
+std::pair<const Job*, const Job*> get_marks(){
+  const Job* last = nullptr;
+  const Job* second_last = nullptr;
+
+  for(auto &job: jobs){
+    if(!job.done){
+      second_last = last;
+      last = &job;
+    }
+  }
+  return {last, second_last};
+}
+
+void print_jobs(){
+  auto [last, second_last] = get_marks();
+
+  for(auto &job: jobs){
+    if(!job.done) continue;
+
+    std::cout << "[" << job.id << "]";
+
+    if(&job == last){
+      std::cout << "+";
+    }else if(&job == second_last){
+      std::cout << "-";
+    }
+    std::cout << "  Done                 " << job.command << "\n";
+
+  }
+}
+
+void cleanup_jobs(){
+  jobs.erase(std::remove_if(jobs.begin(), jobs.end(), [](const Job &j) {return j.done}), jobs.end());
+}
+
 void update_jobs(){
   for(auto &job: jobs){
     if(job.done){
@@ -251,46 +287,50 @@ void update_jobs(){
 }
 
 void reap_jobs(){
-    std::vector<int> remove_list;
 
-    for(int i = 0; i < jobs.size(); i++){
+    //std::vector<int> remove_list;
+
+    for(auto &job: jobs){
+      if(job.done) continue;
+
       int status;
-      pid_t ret = waitpid(jobs[i].pid, &status, WNOHANG);
+      pid_t ret = waitpid(jobs.pid, &status, WNOHANG);
 
-      if(ret == jobs[i].pid && (WIFEXITED(status) || WIFSIGNALED(status))){
-        jobs[i].done = true;
+      if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
+        job.done = true;
+        job.running = false;
       }else if(ret == -1 && errno == ECHILD){
-        jobs[i].done = true;
+        job.done = true;
+        job.running = false;
       }
     }
 
-    int last = -1;
-    int second_last = -1;
-    for(int i = 0; i < jobs.size();i++){
-      if(!jobs[i].done){
-        second_last = last;
-        last = i;
-      }
-    }
+    // int last = -1;
+    // int second_last = -1;
+    // for(int i = 0; i < jobs.size();i++){
+    //   if(!jobs[i].done){
+    //     second_last = last;
+    //     last = i;
+    //   }
+    // }
 
-    for(int i = 0; i < jobs.size();i++){
-      if(jobs[i].done){
-        std::cout << "[" << jobs[i].id << "]";
-        if(i == last){
-          std::cout << "+";
-        }else if(i == second_last){
-          std::cout << "-";
-        }
+    // for(int i = 0; i < jobs.size();i++){
+    //   if(jobs[i].done){
+    //     std::cout << "[" << jobs[i].id << "]";
+    //     if(i == last){
+    //       std::cout << "+";
+    //     }else if(i == second_last){
+    //       std::cout << "-";
+    //     }
 
-        std::cout << "  Done                 " << jobs[i].command << "\n";
-        remove_list.push_back(i);
-      }
-    }
+    //     std::cout << "  Done                 " << jobs[i].command << "\n";
+    //     remove_list.push_back(i);
+    //   }
+    // }
 
-    for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
-      jobs.erase(jobs.begin() + *it);
-    }
-
+    // for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
+    //   jobs.erase(jobs.begin() + *it);
+    // }
 }
 
 int main() {
@@ -311,6 +351,7 @@ int main() {
     if(input == "exit"){
       break;
     }
+    print_jobs();
     std::vector<std::string> wordcollector = tokenize(input);
 
     if(wordcollector.empty()) continue;
