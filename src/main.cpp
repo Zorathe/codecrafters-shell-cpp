@@ -291,7 +291,6 @@ int main() {
     char* line = readline("$ " );
     if(!line) break;
     std::string input(line);
-    std::string original_command = input;
     if(*line) add_history(line);
     free(line);
     if(input == "exit"){
@@ -459,7 +458,7 @@ int main() {
           std::cout << "  Done                 " << jobs[i].command << "\n";
         //   remove_list.push_back(i);
         }else{
-          std::cout << "  Running                 " << jobs[i].command << "\n";
+          std::cout << "  Running                 " << jobs[i].command << "&\n";
         }
       }
 
@@ -503,7 +502,7 @@ int main() {
         exit(127);
       }else if(pid > 0){
         if(run_in_back){
-          jobs.push_back(Job{next_job_id++, pid, original_command});
+          jobs.push_back(Job{next_job_id++, pid, command});
           std::cout << "[" << jobs.back().id << "] " << pid << "\n";
         }else{
           int status;
