@@ -442,7 +442,7 @@ int main() {
             int exit_status = WEXITSTATUS(status);
             process_list[process[task_running]] = false;
             task_running++;
-            std::cout << "Task was done" << std::endl;
+           // std::cout << "Task was done" << std::endl;
           }
         //}
 
