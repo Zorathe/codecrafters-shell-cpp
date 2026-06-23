@@ -257,13 +257,13 @@ std::pair<int, int> get_marks(){
 void print_jobs(){
   auto [last, second_last] = get_marks();
 
-  for(auto &job: jobs){
+  for(int i = 0; i < jobs.size(); i++){
 
     std::cout << "[" << job.id << "]";
 
-    if(&job == last){
+    if(i == last){
       std::cout << "+";
-    }else if(&job == second_last){
+    }else if(i == second_last){
       std::cout << "-";
     }
     if(job.done){
