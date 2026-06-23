@@ -266,10 +266,10 @@ void print_jobs(){
     }else if(i == second_last){
       std::cout << "-";
     }
-    if(job.done){
-      std::cout << "  Done                 " << job.command << "\n";
+    if(jobs[i].done){
+      std::cout << "  Done                 " << jobs[i].command << "\n";
     }else{
-      std::cout << "  Running                 " << job.command << " &\n";
+      std::cout << "  Running                 " << jobs[i].command << " &\n";
     }
     
 
