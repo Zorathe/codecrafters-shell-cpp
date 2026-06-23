@@ -252,9 +252,9 @@ void reap_jobs(){
         
         std::cout << "  Done                 " << jobs[i].command << "\n";
         remove_list.push_back(i);
-      }else if(ret == -1 && errno == ECHILD){
+      }/*else if(ret == -1 && errno == ECHILD){
         remove_list.push_back(i);
-      }
+      }*/
     }
 
     for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
@@ -490,10 +490,6 @@ int main() {
         }else{
           int status;
           waitpid(pid, &status, 0);
-          
-          if(WIFEXITED(status)){
-            int exit_status = WEXITSTATUS(status);            
-          }
         }
 
       }else{
