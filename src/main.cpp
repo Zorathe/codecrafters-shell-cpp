@@ -23,7 +23,7 @@ static std::vector<std::string> process;
 struct Job {
   int id;
   pid_t pid;
-  std::string cmd;
+  std::string command;
   bool done;
 };
 
@@ -278,7 +278,6 @@ int main() {
     if(wordcollector.back() == "&"){
       run_in_back = true;
       wordcollector.pop_back();
-      jobs.push_back(next_job_id++, pid, command, false);
     }
 
     if(wordcollector[0] == "echo"){
@@ -445,6 +444,7 @@ int main() {
         exit(127);
       }else if(pid > 0){
         if(run_in_back){
+          jobs.push_back({next_job_id++, pid, command, false});
           std::cout << "[" << process.size() << "] " << pid << "\n";
         }else{
           for(auto &job: jobs){
