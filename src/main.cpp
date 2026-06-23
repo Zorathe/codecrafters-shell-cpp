@@ -454,7 +454,7 @@ int main() {
         }else if(i == jobs.size()-2){
           std::cout << "-";
         }
-        if(jobs[i].done)
+        if(jobs[i].done){
           std::cout << "  Done                 " << jobs[i].command << "\n";
         //   remove_list.push_back(i);
         }else{
