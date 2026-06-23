@@ -392,7 +392,7 @@ int main() {
           if(process_list[process[i]]){
             std::cout << "  Running                 " << process[i] << "\n";
           }else{
-            std::cout << "  Done                 " << process[i].substr(0,process.size()-2) << "\n";
+            std::cout << "  Done                 " << process[i].substr(0,process.size()-1) << "\n";
           }
             
         }
@@ -442,6 +442,7 @@ int main() {
             int exit_status = WEXITSTATUS(status);
             process_list[process[task_running]] = false;
             task_running++;
+            std::cout << "Task was done" << std::endl;
           }
         }
 
