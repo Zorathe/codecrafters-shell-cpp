@@ -250,7 +250,7 @@ int main() {
       pid_t ret = waitpid(jobs[i].pid, &status, WNOHANG);
 
       if(ret == jobs[i].pid && (WIFEXITED(status) || WIFSIGNALED(status))){
-        jobs.done = true;
+        jobs[i].done = true;
         std::cout << "[" << jobs[i].id << "]";
         if(i == jobs.size()-1){
           std::cout << "+";
@@ -261,7 +261,7 @@ int main() {
           std::cout << "  Done                 " << jobs[i].command << "\n";
           remove_list.push_back(i);
       }else if(ret == -1){
-        jobs.done = true;
+        jobs[i].done = true;
       }
     }
 
