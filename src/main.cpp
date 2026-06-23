@@ -263,7 +263,7 @@ void reap_jobs(){
         std::cout << "[" << jobs[i].id << "]";
         if(!jobs[i].done){
           if(last == -1){
-            last = il
+            last = i;
           }else if(second_last == -1){
             second_last = jobs.size()-1-i;
           }
