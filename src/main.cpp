@@ -507,7 +507,7 @@ int main() {
       //   }
       // }
       //std::vector<int> remove_list;
-      update_jobs();
+      //update_jobs();
       for(int i = 0; i < jobs.size(); i++){
         std::cout << "[" << jobs[i].id << "]";
         if(i == jobs.size()-1){
