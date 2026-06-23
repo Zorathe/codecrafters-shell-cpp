@@ -269,7 +269,7 @@ void print_jobs(){
 }
 
 void cleanup_jobs(){
-  jobs.erase(std::remove_if(jobs.begin(), jobs.end(), [](const Job &j) {return j.done}), jobs.end());
+  jobs.erase(std::remove_if(jobs.begin(), jobs.end(), [](const Job &j) {return j.done;}), jobs.end());
 }
 
 void update_jobs(){
