@@ -287,10 +287,11 @@ int main() {
   rl_bind_key('\t', rl_complete);
   while(true){
     reap_jobs();
-
+  
     char* line = readline("$ " );
     if(!line) break;
     std::string input(line);
+    std::string original_command = input;
     if(*line) add_history(line);
     free(line);
     if(input == "exit"){
@@ -502,7 +503,7 @@ int main() {
         exit(127);
       }else if(pid > 0){
         if(run_in_back){
-          jobs.push_back(Job{next_job_id++, pid, command});
+          jobs.push_back(Job{next_job_id++, pid, original_command});
           std::cout << "[" << jobs.back().id << "] " << pid << "\n";
         }else{
           int status;
