@@ -258,26 +258,32 @@ void reap_jobs(){
       pid_t ret = waitpid(jobs[i].pid, &status, WNOHANG);
 
       if(ret == jobs[i].pid && (WIFEXITED(status) || WIFSIGNALED(status))){
-        int last = -1;
-        int second_last = -1;
+        jobs[i].done = true;
+      }else if(ret == -1 && errno == ECHILD){
+        jobs[i].done = true;
+      }
+    }
+
+    int last = -1;
+    int second_last = -1;
+    for(int i = 0; i < jobs.size();i++){
+      if(!jobs[i].done){
+        second_last = last;
+        last = i;
+      }
+    }
+
+    for(int i = 0; i < jobs.size();i++){
+      if(jobs[i].done){
         std::cout << "[" << jobs[i].id << "]";
-        if(!jobs[i].done){
-          if(last == -1){
-            last = i;
-          }else if(second_last == -1){
-            second_last = jobs.size()-1-i;
-          }
-        }
         if(i == last){
           std::cout << "+";
         }else if(i == second_last){
           std::cout << "-";
         }
-        
+
         std::cout << "  Done                 " << jobs[i].command << "\n";
         remove_list.push_back(i);
-      }else if(ret == -1 && errno == ECHILD){
-        jobs[i].done = true;
       }
     }
 
