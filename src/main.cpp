@@ -435,7 +435,7 @@ int main() {
       }else if(pid > 0){
         if(run_in_back){
           std::cout << "[" << process.size() << "] " << pid << "\n";
-        //}else{
+        }//else{
           int status;
           waitpid(pid, &status, WNOHANG);
           if(WIFEXITED(status)){
