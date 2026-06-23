@@ -249,7 +249,7 @@ int main() {
       int status;
       pid_t ret = waitpid(jobs[i].pid, &status, WNOHANG);
 
-      if(ret == job[i].pid && (WIFEXITED(status) || WIFSIGNALED(status))){
+      if(ret == jobs[i].pid && (WIFEXITED(status) || WIFSIGNALED(status))){
         job.done = true;
         std::cout << "[" << jobs[i].id << "]";
         if(i == jobs.size()-1){
