@@ -392,7 +392,7 @@ int main() {
           if(process_list[process[i]]){
             std::cout << "  Running                 " << process[i] << "\n";
           }else{
-            std::cout << "  Done                 " << process[i].substr(0,process.size()-1) << "\n";
+            std::cout << "  Done                 " << process[i] << "\n";
           }
             
         }
