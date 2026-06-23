@@ -413,16 +413,16 @@ int main() {
           }
       }
     }else if(wordcollector[0] == "jobs"){
-      for(auto &job: jobs){
-        int status;
-        pid_t ret = waitpid(job.pid, &status, WNOHANG);
+      // for(auto &job: jobs){
+      //   int status;
+      //   pid_t ret = waitpid(job.pid, &status, WNOHANG);
 
-        if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
-          job.done = true;
-        }else if(ret == -1){
-          job.done = true;
-        }
-      }
+      //   if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
+      //     job.done = true;
+      //   }else if(ret == -1){
+      //     job.done = true;
+      //   }
+      // }
 
       for(int i = 0; i < jobs.size(); i++){
         std::cout << "[" << jobs[i].id << "]";
