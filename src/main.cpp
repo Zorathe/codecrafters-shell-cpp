@@ -294,7 +294,7 @@ void reap_jobs(){
       if(job.done) continue;
 
       int status;
-      pid_t ret = waitpid(jobs.pid, &status, WNOHANG);
+      pid_t ret = waitpid(job.pid, &status, WNOHANG);
 
       if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
         job.done = true;
