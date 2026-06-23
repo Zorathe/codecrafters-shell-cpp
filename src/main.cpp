@@ -243,6 +243,22 @@ int main() {
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
   while(true){
+      for(int i = 0; i < jobs.size(); i++){
+        std::cout << "[" << jobs[i].id << "]";
+        if(i == jobs.size()-1){
+          std::cout << "+";
+        }else if(i == jobs.size()-2){
+          std::cout << "-";
+        }
+        if(jobs[i].done){
+          std::cout << "  Done                 " << jobs[i].command << "\n";
+          remove_list.push_back(i);
+        }
+      }
+
+      for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
+        jobs.erase(jobs.begin() + *it);
+      }
 
     char* line = readline("$ " );
     if(!line) break;
@@ -462,9 +478,7 @@ int main() {
           waitpid(pid, &status, 0);
           
           if(WIFEXITED(status)){
-            int exit_status = WEXITSTATUS(status);
-            
-           // std::cout << "Task was done" << std::endl;
+            int exit_status = WEXITSTATUS(status);            
           }
         }
 
