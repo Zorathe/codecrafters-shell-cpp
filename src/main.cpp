@@ -17,8 +17,6 @@
 
 static std::unordered_map<std::string,std::string> completion_script;
 static std::vector<std::string> script_matches;
-static std::vector<std::string> process;
-
 
 struct Job {
   int id;
@@ -390,6 +388,15 @@ int main() {
       }
     }else if(wordcollector[0] == "jobs"){
       std::vector<int> remove_list;
+
+      for(auto &job : jobs){
+        int status;
+        pid_t ret = waitpid(job.pid, &status, WNOHANG);
+        
+        if(ret == job.pid){
+          job.done = true;
+        }
+      }
       for(int i = 0; i < jobs.size(); i++){
         std::cout << "[" << jobs[i].id << "]";
         if(i == jobs.size()-1){
@@ -445,13 +452,15 @@ int main() {
       }else if(pid > 0){
         if(run_in_back){
           jobs.push_back({next_job_id++, pid, command, false});
-          std::cout << "[" << process.size() << "] " << pid << "\n";
+          std::cout << "[" << next_job_id << "] " << pid << "\n";
         }else{
           for(auto &job: jobs){
             int status;
             pid_t ret = waitpid(job.pid, &status, WNOHANG);
 
             if(ret == job.pid){
+              job.done = true;
+            }else if(ret == -1){
               job.done = true;
             }
           }
