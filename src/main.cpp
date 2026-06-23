@@ -272,7 +272,6 @@ void print_jobs(){
       std::cout << "  Running                 " << jobs[i].command << " &\n";
     }
     
-
   }
 }
 
@@ -577,8 +576,9 @@ int main() {
       }else{
         perror("fork");
       }
-      print_jobs();
     }
+    print_jobs();
+
   }
 
 }
