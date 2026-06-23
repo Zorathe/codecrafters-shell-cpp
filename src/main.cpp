@@ -433,7 +433,8 @@ int main() {
       //     job.done = true;
       //   }
       // }
-
+      reap_jobs();
+      std::vector<int> remove_list;
       for(int i = 0; i < jobs.size(); i++){
         std::cout << "[" << jobs[i].id << "]";
         if(i == jobs.size()-1){
