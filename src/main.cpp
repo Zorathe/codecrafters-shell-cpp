@@ -485,7 +485,7 @@ int main() {
         exit(127);
       }else if(pid > 0){
         if(run_in_back){
-          jobs.push_back(Job{next_job_id++, pid, command, false});
+          jobs.push_back(Job{next_job_id++, pid, command});
           std::cout << "[" << jobs.back().id << "] " << pid << "\n";
         }else{
           int status;
