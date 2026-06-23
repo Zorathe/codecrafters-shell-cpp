@@ -451,11 +451,11 @@ int main() {
         exit(127);
       }else if(pid > 0){
         if(run_in_back){
-          jobs.push_back({next_job_id++, pid, command, false});
+          jobs.push_back(Job{next_job_id++, pid, command, false});
           std::cout << "[" << next_job_id << "] " << pid << "\n";
         }else{
+          int status;
           for(auto &job: jobs){
-            int status;
             pid_t ret = waitpid(job.pid, &status, WNOHANG);
 
             if(ret == job.pid){
