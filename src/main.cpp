@@ -259,7 +259,7 @@ void print_jobs(){
 
   for(int i = 0; i < jobs.size(); i++){
 
-    std::cout << "[" << job.id << "]";
+    std::cout << "[" << jobs[i].id << "]";
 
     if(i == last){
       std::cout << "+";
