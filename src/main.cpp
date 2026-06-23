@@ -258,10 +258,19 @@ void reap_jobs(){
       pid_t ret = waitpid(jobs[i].pid, &status, WNOHANG);
 
       if(ret == jobs[i].pid && (WIFEXITED(status) || WIFSIGNALED(status))){
+        int last = -1;
+        int second_last = -1;
         std::cout << "[" << jobs[i].id << "]";
-        if(i == jobs.size()-1){
+        if(!jobs[i].done){
+          if(last == -1){
+            last = il
+          }else if(second_last == -1){
+            second_last = jobs.size()-1-i;
+          }
+        }
+        if(i == last){
           std::cout << "+";
-        }else if(i == jobs.size()-2){
+        }else if(i == second_last){
           std::cout << "-";
         }
         
