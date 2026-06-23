@@ -18,7 +18,7 @@
 static std::unordered_map<std::string,std::string> completion_script;
 static std::vector<std::string> script_matches;
 static std::vector<std::string> process;
-static std::unordered_map<std::string task, bool is_running> process_list;
+static std::unordered_map<std::string, bool> process_list;
 static int task_running = 0;
 
 std::vector<std::string> tokenize(const std::string &input){
