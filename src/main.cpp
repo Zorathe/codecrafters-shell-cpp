@@ -513,20 +513,20 @@ int main() {
       // }
       //std::vector<int> remove_list;
       //update_jobs();
-      for(int i = 0; i < jobs.size(); i++){
-        std::cout << "[" << jobs[i].id << "]";
-        if(i == jobs.size()-1){
-          std::cout << "+";
-        }else if(i == jobs.size()-2){
-          std::cout << "-";
-        }
-        if(jobs[i].done){
-          std::cout << "  Done                 " << jobs[i].command << "\n";
-        //   remove_list.push_back(i);
-        }else{
-          std::cout << "  Running                 " << jobs[i].command << " &\n";
-        }
-      }
+      // for(int i = 0; i < jobs.size(); i++){
+      //   std::cout << "[" << jobs[i].id << "]";
+      //   if(i == jobs.size()-1){
+      //     std::cout << "+";
+      //   }else if(i == jobs.size()-2){
+      //     std::cout << "-";
+      //   }
+      //   if(jobs[i].done){
+      //     std::cout << "  Done                 " << jobs[i].command << "\n";
+      //   //   remove_list.push_back(i);
+      //   }else{
+      //     std::cout << "  Running                 " << jobs[i].command << " &\n";
+      //   }
+      // }
 
       // for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
       //   jobs.erase(jobs.begin() + *it);
