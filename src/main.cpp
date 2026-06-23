@@ -244,6 +244,17 @@ int main() {
   rl_bind_key('\t', rl_complete);
   while(true){
     std::vector<int> remove_list;
+
+    for(auto &job: jobs){
+      int status;
+      pid_t ret = waitpid(job.pid, &status, WNOHANG);
+
+      if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
+        job.done = true;
+      }else if(ret == -1){
+        job.done = true;
+      }
+    }
     for(int i = 0; i < jobs.size(); i++){
       if(jobs[i].done){
         std::cout << "[" << jobs[i].id << "]";
