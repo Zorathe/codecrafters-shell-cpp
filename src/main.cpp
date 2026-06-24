@@ -389,7 +389,6 @@ int main() {
       if(i) command += " ";
       command += wordcollector[i];
     }
-    print_jobs();
     if(wordcollector[0] == "echo"){
       
       int saved_stdout = -1;
