@@ -296,7 +296,7 @@ void cleanup_jobs(){
 void reap_jobs(){
 
     //std::vector<int> remove_list;
-    auto [last, second_last] = get_marks();
+    
 
     for(auto &job: jobs){
       if(job.done) continue;
@@ -307,8 +307,11 @@ void reap_jobs(){
       if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
         job.done = true;
         job.running = false;
+        
+
         std::cout << "[" << job.id << "]";
-        if(job.id == jobs[last].id){
+        
+        if(last != -1 && job.id == jobs[last].id){
           std::cout << "+";
         }else if(second_last != -1 && job.id == jobs[second_last].id){
           std::cout << "-";
@@ -319,6 +322,8 @@ void reap_jobs(){
         job.running = false;
       }
     }
+    auto [last, second_last] = get_marks();
+
 
     // int last = -1;
     // int second_last = -1;
@@ -367,7 +372,7 @@ int main() {
       break;
     }
     
-    cleanup_jobs();
+    //cleanup_jobs();
     std::vector<std::string> wordcollector = tokenize(input);
 
     if(wordcollector.empty()) continue;
@@ -506,8 +511,9 @@ int main() {
           }
       }
     }else if(wordcollector[0] == "jobs"){
+      reap_jobs();
       print_jobs();
-
+      cleanup_jobs();
       // for(auto &job: jobs){
       //   int status;
       //   pid_t ret = waitpid(job.pid, &status, WNOHANG);
