@@ -246,10 +246,10 @@ std::pair<int, int> get_marks(){
   int last = -1;
   int second_last = -1;
 
-  for(int i = 0; i < jobs.size(); i++){
-    if(!jobs[i].done){
+  for(const auto &job: jobs){
+    if(!job.done){
       second_last = last;
-      last = i;
+      last = job.id;
     }
   }
 
@@ -260,12 +260,11 @@ void print_jobs(){
   auto [last, second_last] = get_marks();
 
   for(int i = 0; i < jobs.size(); i++){
-
     std::cout << "[" << jobs[i].id << "]";
 
-    if(i == last){
+    if(jobs[i].id == last){
       std::cout << "+";
-    }else if(i == second_last){
+    }else if(jobs[i].id == second_last){
       std::cout << "-";
     }
     if(jobs[i].done){
@@ -317,9 +316,9 @@ void reap_jobs(){
 
         std::cout << "[" << it->id << "]";
         
-        if(last != -1 && it->id == jobs[last].id){
+        if(it->id == last){
           std::cout << "+";
-        }else if(second_last != -1 && it->id == jobs[second_last].id){
+        }else if(it->id == second_last){
           std::cout << "-";
         }
           std::cout << "  Done                 " << it->command << "\n";
