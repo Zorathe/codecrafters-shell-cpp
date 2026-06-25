@@ -325,7 +325,7 @@ void reap_jobs(){
           it = jobs.erase(it);
           ++it;
       }else if(ret == -1 && errno == ECHILD){
-        it = jobs.erase(it);
+        //it = jobs.erase(it);
         ++it;
       }else{
         ++it;
