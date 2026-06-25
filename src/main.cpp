@@ -378,7 +378,7 @@ int main() {
       break;
     }
     
-    //cleanup_jobs();
+    cleanup_jobs();
     std::vector<std::string> wordcollector = tokenize(input);
 
     if(wordcollector.empty()) continue;
