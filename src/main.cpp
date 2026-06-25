@@ -311,8 +311,8 @@ void reap_jobs(){
       if(ret == it->pid && (WIFEXITED(status) || WIFSIGNALED(status))){
         auto [last, second_last] = get_marks();
 
-        // it->done = true;
-        // it->running = false;
+        it->done = true;
+        it->running = false;
 
         std::cout << "[" << it->id << "]";
         
