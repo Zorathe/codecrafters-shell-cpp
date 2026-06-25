@@ -242,9 +242,17 @@ char **my_completion(const char *text, int start, int end){
 }
 
 std::pair<int, int> get_marks(){
-  if(jobs.empty()){return {-1,-1};}
-  int last = jobs.size()-1;
-  int second_last = jobs.size() >= 2 ? jobs.size() - 2 : -1;
+  
+  int last = -1;
+  int second_last = -1;
+
+  for(int i = 0; i < jobs.size(); i++){
+    if(!jobs[i].done){
+      second_last = last;
+      last = i;
+    }
+  }
+
   return {last, second_last};
 }
 
@@ -292,30 +300,34 @@ void reap_jobs(){
     //std::vector<int> remove_list;
     
 
-    for(auto &job: jobs){
-      if(job.done) continue;
+    for(auto it = jobs.begin(); it != jobs.end();){
+      if(it->done){
+        it = jobs.erase(it);
+        continue;
+      }
 
       int status;
-      pid_t ret = waitpid(job.pid, &status, WNOHANG);
+      pid_t ret = waitpid(it->pid, &status, WNOHANG);
 
-      if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
+      if(ret == it->pid && (WIFEXITED(status) || WIFSIGNALED(status))){
         auto [last, second_last] = get_marks();
 
-        job.done = true;
-        job.running = false;
+        it->done = true;
+        it->running = false;
 
-
-        std::cout << "[" << job.id << "]";
+        std::cout << "[" << it->id << "]";
         
-        if(last != -1 && job.id == jobs[last].id){
+        if(last != -1 && it->id == jobs[last].id){
           std::cout << "+";
-        }else if(second_last != -1 && job.id == jobs[second_last].id){
+        }else if(second_last != -1 && it->id == jobs[second_last].id){
           std::cout << "-";
         }
-          std::cout << "  Done                 " << job.command << "\n";
+          std::cout << "  Done                 " << it->command << "\n";
+          it = jobs.erase(it);
       }else if(ret == -1 && errno == ECHILD){
-        job.done = true;
-        job.running = false;
+        it = jobs.erase(it);
+      }else{
+        ++it;
       }
     }
 
@@ -508,7 +520,7 @@ int main() {
     }else if(wordcollector[0] == "jobs"){
       reap_jobs();
       print_jobs();
-      cleanup_jobs();
+      //cleanup_jobs();
       // for(auto &job: jobs){
       //   int status;
       //   pid_t ret = waitpid(job.pid, &status, WNOHANG);
