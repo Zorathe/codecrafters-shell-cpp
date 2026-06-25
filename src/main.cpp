@@ -307,7 +307,8 @@ void reap_jobs(){
       if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
         job.done = true;
         job.running = false;
-        
+        auto [last, second_last] = get_marks();
+
 
         std::cout << "[" << job.id << "]";
         
@@ -322,7 +323,6 @@ void reap_jobs(){
         job.running = false;
       }
     }
-    auto [last, second_last] = get_marks();
 
 
     // int last = -1;
