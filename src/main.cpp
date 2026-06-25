@@ -323,8 +323,10 @@ void reap_jobs(){
         }
           std::cout << "  Done                 " << it->command << "\n";
          // it = jobs.erase(it);
+         ++it;
       }else if(ret == -1 && errno == ECHILD){
        // it = jobs.erase(it);
+       ++it;
       }else{
         ++it;
       }
