@@ -242,15 +242,9 @@ char **my_completion(const char *text, int start, int end){
 }
 
 std::pair<int, int> get_marks(){
-  int last = -1;
-  int second_last = -1;
-
-  for(int i = 0; i < jobs.size(); i++){
-    if(!jobs[i].done){
-      second_last = last;
-      last = i;
-    }
-  }
+  if(jobs.empty()){return {-1,-1};}
+  int last = jobs.size()-1;
+  int second_last = jobs.size() >= 2 ? jobs.size() - 2 : -1;
   return {last, second_last};
 }
 
@@ -305,9 +299,10 @@ void reap_jobs(){
       pid_t ret = waitpid(job.pid, &status, WNOHANG);
 
       if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
+        auto [last, second_last] = get_marks();
+
         job.done = true;
         job.running = false;
-        auto [last, second_last] = get_marks();
 
 
         std::cout << "[" << job.id << "]";
