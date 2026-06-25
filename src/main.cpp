@@ -296,6 +296,7 @@ void cleanup_jobs(){
 void reap_jobs(){
 
     //std::vector<int> remove_list;
+    auto [last, second_last] = get_marks();
 
     for(auto &job: jobs){
       if(job.done) continue;
@@ -306,6 +307,13 @@ void reap_jobs(){
       if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
         job.done = true;
         job.running = false;
+        std::cout << "[" << job.id << "]";
+        if(job.id == job[last].id){
+          std::cout << "+";
+        }else if(second_last != -1 && job.id == jobs[second_last].id){
+          std::cout << "-";
+        }
+          std::cout << "  Done                 " << job.command << "\n";
       }else if(ret == -1 && errno == ECHILD){
         job.done = true;
         job.running = false;
