@@ -308,7 +308,7 @@ void reap_jobs(){
         job.done = true;
         job.running = false;
         std::cout << "[" << job.id << "]";
-        if(job.id == job[last].id){
+        if(job.id == jobs[last].id){
           std::cout << "+";
         }else if(second_last != -1 && job.id == jobs[second_last].id){
           std::cout << "-";
