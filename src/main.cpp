@@ -282,7 +282,7 @@ void reap_jobs(bool explicitly_called){
     }
 }
 
-void stdouterr(const vector<std::string>& token){
+void stdouterr(const std::vector<std::string>& token){
 
   //std::string out, err;
   //bool isOut, isErr;
@@ -506,7 +506,7 @@ int main() {
       c_args.push_back(nullptr);
       
 
-      auto pipp_it = find(wordcollector.begin(),wordcollector.end(), "|");
+      auto pipe_it = find(wordcollector.begin(),wordcollector.end(), "|");
       if(pipe_it != wordcollector.end()){
         std::vector<std::string> parent(wordcollector.begin(), pipe_it);
         std::vector<std::string> child(pipe_it + 1, wordcollector.end());
@@ -519,7 +519,7 @@ int main() {
         pid_t pid = fork();
         if(pid == 0){
           close(pipefd[0]);
-          dup2(pipfd[1], STDOUT_FILENO);
+          dup2(pipefd[1], STDOUT_FILENO);
           close(pipefd[1]);
           stdouterr(parent);
         //   if(redirect){
