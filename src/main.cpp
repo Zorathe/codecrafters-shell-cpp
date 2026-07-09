@@ -266,6 +266,8 @@ void reap_jobs(bool explicitly_called){
 
     for(int i = 0; i < jobs.size(); i++){
       if(jobs[i].running){
+        std::cout << "was start runnn" << std::endl;
+
         int status;
         pid_t ret = waitpid(jobs[i].id, &status, WNOHANG);
         
