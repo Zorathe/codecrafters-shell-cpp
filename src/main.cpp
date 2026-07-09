@@ -271,6 +271,7 @@ void reap_jobs(bool explicitly_called){
         
         if(ret > 0 && (WIFEXITED(status))){
           jobs[i].done = true;
+          std::cout << "ret > 0 and WIFEXITED confirmed" << std::endl;
           jobs[i].running = false;
         }
       }
