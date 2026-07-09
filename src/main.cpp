@@ -573,7 +573,7 @@ int main() {
             }
             curr_id = max_id + 1;
           }
-          Job j = {curr_id, pid, command, true, false};
+          Job j = {curr_id, pid, command, false, true};
           jobs.push_back(j);
           //jobs.push_back(Job{next_job_id++, pid, command});
           std::cout << "[" << j.id << "] " << j.pid << "\n";
