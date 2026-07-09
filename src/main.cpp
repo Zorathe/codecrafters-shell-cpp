@@ -291,7 +291,6 @@ void reap_jobs(bool explicitly_called){
             std::cout << "  Running                 " << jobs[i].command << " &\n";
           }
         }
-      
     }
 
     for(auto it = jobs.begin(); it != jobs.end();){
@@ -365,7 +364,7 @@ int main() {
     }
 
     bool run_in_back = false;
-    if(wordcollector.back() == "&"){
+    if(!wordcollector.empty() && wordcollector.back() == "&"){
       run_in_back = true;
       wordcollector.pop_back();
       if(wordcollector.empty()){
@@ -556,8 +555,18 @@ int main() {
         exit(127);
       }else if(pid > 0){
         if(run_in_back){
-          jobs.push_back(Job{next_job_id++, pid, command});
-          std::cout << "[" << jobs.back().id << "] " << pid << "\n";
+          int cur_id = 1;
+          if(!jobs.empty()){
+            int max_id = 0;
+            for(const auto &job: jobs){
+              if(job.id > max_id) max_id = job.id;
+            }
+            curr_id = max_id + 1;
+          }
+          Job j = {curr_id, pid, command};
+          jobs.push_back(j);
+          //jobs.push_back(Job{next_job_id++, pid, command});
+          std::cout << "[" << j.id << "] " << j.pid << "\n";
         }else{
           int status;
           waitpid(pid, &status, 0);
