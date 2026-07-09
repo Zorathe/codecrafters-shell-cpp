@@ -304,7 +304,7 @@ void reap_jobs(bool explicitly_called){
         int status;
         pid_t ret = waitpid(jobs[i].id, &status, WNOHANG);
         
-        if(ret > 0 && (WIFEXITED(status) || WIFSIGNALED(status))){
+        if(ret > 0 && (WIFEXITED(status))){
           auto [last, second_last] = get_marks();
           jobs[i].done = true;
           jobs[i].running = false;
