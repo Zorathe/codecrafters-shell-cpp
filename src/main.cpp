@@ -311,6 +311,7 @@ void reap_jobs(){
         }
       }
 
+        if(job.done){
         std::cout << "[" << job.id << "]";
         
         if(job.id == jobs.size()-1){
@@ -319,6 +320,8 @@ void reap_jobs(){
           std::cout << "-";
         }
           std::cout << "  Done                 " << job.command << "\n";
+        }
+
           
     }
 
