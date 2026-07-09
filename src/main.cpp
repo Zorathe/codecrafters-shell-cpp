@@ -301,16 +301,15 @@ void reap_jobs(){
 
     for(auto& job : jobs){
       if(job.running){
-
-      int status;
-      pid_t ret = waitpid(it->pid, &status, WNOHANG);
-
-      if(ret > 0 && (WIFEXITED(status) || WIFSIGNALED(status))){
-        auto [last, second_last] = get_marks();
-        job.done = true;
-        job.running = false;
+        int status;
+        pid_t ret = waitpid(it->pid, &status, WNOHANG);
+        
+        if(ret > 0 && (WIFEXITED(status) || WIFSIGNALED(status))){
+          auto [last, second_last] = get_marks();
+          job.done = true;
+          job.running = false;
+        }
       }
-
 
         std::cout << "[" << job.id << "]";
         
@@ -321,7 +320,7 @@ void reap_jobs(){
         }
           std::cout << "  Done                 " << job.command << "\n";
           
-    }
+      }
 
 
     // int last = -1;
