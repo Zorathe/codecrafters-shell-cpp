@@ -269,12 +269,14 @@ void reap_jobs(bool explicitly_called){
         int status;
         pid_t ret = waitpid(jobs[i].id, &status, WNOHANG);
         
-        if(ret > 0 && (WIFEXITED(status))){
+        if(ret > 0){
+          if(WIFEXITED(status)){
           jobs[i].done = true;
           std::cout << "ret > 0 and WIFEXITED confirmed" << std::endl;
           jobs[i].running = false;
+          }
         }
-        std::cout << "was this run" << std::endl;
+        //std::cout << "was this run" << std::endl;
       }
     }
 
