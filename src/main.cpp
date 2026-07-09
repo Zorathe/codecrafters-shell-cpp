@@ -369,7 +369,7 @@ int main() {
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
   while(true){
-    reap_jobs();
+    //reap_jobs();
   
     char* line = readline("$ " );
     if(!line) break;
