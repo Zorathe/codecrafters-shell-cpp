@@ -311,7 +311,7 @@ void reap_jobs(bool explicitly_called){
         }
       }
 
-        if(explicitly_called || job.done){
+        if(explicitly_called || jobs[i].done){
           std::cout << "[" << jobs[i].id << "]";
           
           if(i == jobs.size()-1){
