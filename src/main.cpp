@@ -539,7 +539,6 @@ int main() {
             int status;
             waitpid(pid, &status, 0);
           }
-      }
 
         }
         pid_t pid2 = fork();
