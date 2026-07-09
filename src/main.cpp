@@ -294,7 +294,7 @@ void cleanup_jobs(){
 //   }
 // }
 
-void reap_jobs(){
+void reap_jobs(bool explicitly_called){
 
     //std::vector<int> remove_list;
     
@@ -311,18 +311,16 @@ void reap_jobs(){
         }
       }
 
-        if(job.done){
-        std::cout << "[" << job.id << "]";
-        
-        if(job.id == jobs.size()-1){
-          std::cout << "+";
-        }else if(job.id == jobs.size()-2){
-          std::cout << "-";
-        }
-          std::cout << "  Done                 " << job.command << "\n";
-        }
-
+        if(explicitly_called || job.done){
+          std::cout << "[" << job.id << "]";
           
+          if(job.id == jobs.size()-1){
+            std::cout << "+";
+          }else if(job.id == jobs.size()-2){
+            std::cout << "-";
+          }
+            std::cout << "  Done                 " << job.command << "\n";
+          }
     }
 
 
@@ -362,7 +360,7 @@ int main() {
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
   while(true){
-    reap_jobs();
+    reap_jobs(false);
   
     char* line = readline("$ " );
     if(!line) break;
@@ -512,8 +510,7 @@ int main() {
           }
       }
     }else if(wordcollector[0] == "jobs"){
-      reap_jobs();
-      print_jobs();
+      reap_jobs(true);
       //cleanup_jobs();
       // for(auto &job: jobs){
       //   int status;
