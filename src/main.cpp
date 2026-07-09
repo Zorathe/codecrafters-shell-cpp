@@ -241,41 +241,6 @@ char **my_completion(const char *text, int start, int end){
   return rl_completion_matches(text,script_generator);
 }
 
-std::pair<int, int> get_marks(){
-  
-  int last = -1;
-  int second_last = -1;
-
-  for(const auto &job: jobs){
-    if(!job.done){
-      second_last = last;
-      last = job.id;
-    }
-  }
-
-  return {last, second_last};
-}
-
-void print_jobs(){
-  auto [last, second_last] = get_marks();
-
-  for(int i = 0; i < jobs.size(); i++){
-    std::cout << "[" << jobs[i].id << "]";
-
-    if(jobs[i].id == last){
-      std::cout << "+";
-    }else if(jobs[i].id == second_last){
-      std::cout << "-";
-    }
-    if(jobs[i].done){
-      std::cout << "  Done                 " << jobs[i].command << "\n";
-    }else{
-      std::cout << "  Running                 " << jobs[i].command << " &\n";
-    }
-    
-  }
-}
-
 void cleanup_jobs(){
   jobs.erase(std::remove_if(jobs.begin(), jobs.end(), [](const Job &j) {return j.done;}), jobs.end());
 }
@@ -305,12 +270,13 @@ void reap_jobs(bool explicitly_called){
         pid_t ret = waitpid(jobs[i].id, &status, WNOHANG);
         
         if(ret > 0 && (WIFEXITED(status))){
-          auto [last, second_last] = get_marks();
           jobs[i].done = true;
           jobs[i].running = false;
         }
       }
+    }
 
+    for(int i = 0; i < jobs.size(); i++){
         if(explicitly_called || jobs[i].done){
           std::cout << "[" << jobs[i].id << "]";
           
@@ -325,6 +291,7 @@ void reap_jobs(bool explicitly_called){
             std::cout << "  Running                 " << jobs[i].command << " &\n";
           }
         }
+      
     }
 
     for(auto it = jobs.begin(); it != jobs.end();){
@@ -382,7 +349,6 @@ int main() {
       break;
     }
     
-    //cleanup_jobs();
     std::vector<std::string> wordcollector = tokenize(input);
 
     if(wordcollector.empty()) continue;
