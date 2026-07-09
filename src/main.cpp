@@ -327,6 +327,13 @@ void reap_jobs(bool explicitly_called){
         }
     }
 
+    for(auto it = jobs.begin(); it != jobs.end()){
+      if(it->done){
+        it = jobs.erase(it);
+      }else{
+        ++it;
+      }
+    }
 
     // int last = -1;
     // int second_last = -1;
