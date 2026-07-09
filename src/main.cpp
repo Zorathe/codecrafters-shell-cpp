@@ -499,11 +499,11 @@ int main() {
     }else if(wordcollector[0] == "jobs"){
       reap_jobs(true);
     }else{
-      std::vector<char*> c_args;
-      for(auto &a : wordcollector){
-        c_args.push_back(const_cast<char*>(a.c_str()));
-      }
-      c_args.push_back(nullptr);
+      // std::vector<char*> c_args;
+      // for(auto &a : wordcollector){
+      //   c_args.push_back(const_cast<char*>(a.c_str()));
+      // }
+      // c_args.push_back(nullptr);
       
 
       auto pipe_it = find(wordcollector.begin(),wordcollector.end(), "|");
@@ -522,6 +522,25 @@ int main() {
           dup2(pipefd[1], STDOUT_FILENO);
           close(pipefd[1]);
           stdouterr(parent);
+        }else if(pid > 0){
+          if(run_in_back){
+            int curr_id = 1;
+            if(!jobs.empty()){
+              int max_id = 0;
+              for(const auto &job: jobs){
+                if(job.id > max_id) max_id = job.id;
+              }
+              curr_id = max_id + 1;
+            }
+            Job j = {curr_id, pid, command, true, false};
+            jobs.push_back(j);
+            std::cout << "[" << j.id << "] " << j.pid << "\n";
+          }else{
+            int status;
+            waitpid(pid, &status, 0);
+          }
+      }
+
         }
         pid_t pid2 = fork();
         if(pid2 == 0){
@@ -605,26 +624,24 @@ int main() {
         }else{
           waitpid(pid, nullptr, 0);
         }  
-      }else if(pid > 0){
-        if(run_in_back){
-          int curr_id = 1;
-          if(!jobs.empty()){
-            int max_id = 0;
-            for(const auto &job: jobs){
-              if(job.id > max_id) max_id = job.id;
-            }
-            curr_id = max_id + 1;
-          }
-          Job j = {curr_id, pid, command, true, false};
-          jobs.push_back(j);
-          std::cout << "[" << j.id << "] " << j.pid << "\n";
-        }else{
-          int status;
-          waitpid(pid, &status, 0);
-        }
-      }else{
-        perror("fork");
-      }
+      }//else if(pid > 0){
+      //   if(run_in_back){
+      //     int curr_id = 1;
+      //     if(!jobs.empty()){
+      //       int max_id = 0;
+      //       for(const auto &job: jobs){
+      //         if(job.id > max_id) max_id = job.id;
+      //       }
+      //       curr_id = max_id + 1;
+      //     }
+      //     Job j = {curr_id, pid, command, true, false};
+      //     jobs.push_back(j);
+      //     std::cout << "[" << j.id << "] " << j.pid << "\n";
+      //   }else{
+      //     int status;
+      //     waitpid(pid, &status, 0);
+      //   }
+      // }
     }
 
   }
