@@ -313,14 +313,14 @@ void reap_jobs(){
 
         std::cout << "[" << job.id << "]";
         
-        if(job.id == last){
+        if(job.id == jobs.size()-1){
           std::cout << "+";
-        }else if(job.id == second_last){
+        }else if(job.id == jobs.size()-2){
           std::cout << "-";
         }
           std::cout << "  Done                 " << job.command << "\n";
           
-      }
+    }
 
 
     // int last = -1;
