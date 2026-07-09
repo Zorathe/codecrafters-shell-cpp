@@ -267,7 +267,6 @@ void reap_jobs(bool explicitly_called){
           }
           if(jobs[i].done){
             std::cout << "  Done                 " << jobs[i].command << "\n";
-            //std::cout << "Was the job done" << std::endl;
           }else{
             std::cout << "  Running                 " << jobs[i].command << " &\n";
           }
@@ -487,13 +486,11 @@ int main() {
           }
           Job j = {curr_id, pid, command, true, false};
           jobs.push_back(j);
-          //jobs.push_back(Job{next_job_id++, pid, command});
           std::cout << "[" << j.id << "] " << j.pid << "\n";
         }else{
           int status;
           waitpid(pid, &status, 0);
         }
-
       }else{
         perror("fork");
       }
