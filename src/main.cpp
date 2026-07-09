@@ -327,7 +327,7 @@ void reap_jobs(bool explicitly_called){
         }
     }
 
-    for(auto it = jobs.begin(); it != jobs.end()){
+    for(auto it = jobs.begin(); it != jobs.end();){
       if(it->done){
         it = jobs.erase(it);
       }else{
