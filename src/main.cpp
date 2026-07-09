@@ -522,46 +522,18 @@ int main() {
           dup2(pipefd[1], STDOUT_FILENO);
           close(pipefd[1]);
           stdouterr(parent);
-        //   if(redirect){
-        //   int file_desc;
-        //   if(redirect_type == ">>" || redirect_type == "1>>" || redirect_type == "2>>"){
-        //     file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
-        //   }else{
-        //     file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        //   }
-        //     if(file_desc == -1){
-        //       perror("open");
-        //       exit(1);
-        //     }
-        //   if(redirect_type == "2>" || redirect_type == "2>>"){
-        //       if(dup2(file_desc, STDERR_FILENO) == -1){
-        //         perror("dup2");
-        //         exit(1);
-        //       }
-        //     }else if(dup2(file_desc, STDOUT_FILENO) == -1){
-        //       perror("dup2");
-        //       exit(1);
-        //     }
-
-        //     close(file_desc);
-        //   }
-        //   execvp(c_args[0], c_args.data());
-        //   std::cerr << c_args[0] << ": command not found\n";
-        //   exit(127);
-        // }
-
-
+        }
         pid_t pid2 = fork();
         if(pid2 == 0){
           close(pipefd[1]);
-          dup2(pipfd[0], STDOUT_FILENO);
+          dup2(pipefd[0], STDOUT_FILENO);
           close(pipefd[1]);
           stdouterr(child);
         }
 
         close(pipefd[0]);
         close(pipefd[1]);
-        waitpid(pid1, nullptr, 0);
+        waitpid(pid, nullptr, 0);
         waitpid(pid2, nullptr, 0);
         //   if(redirect){
         //   int file_desc;
