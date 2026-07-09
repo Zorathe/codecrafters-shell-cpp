@@ -266,6 +266,8 @@ void reap_jobs(bool explicitly_called){
 
     for(int i = 0; i < jobs.size(); i++){
       int temp = 0;
+      if(temp > 4)
+      std::cout << "job size: " << jobs.size() << endl;
       if(jobs[i].running){
         if(temp > 0)
         std::cout << "was start runnn" << std::endl;
@@ -283,6 +285,7 @@ void reap_jobs(bool explicitly_called){
           }
         }
       }
+      temp++;
     }
 
     for(int i = 0; i < jobs.size(); i++){
