@@ -287,6 +287,7 @@ void reap_jobs(bool explicitly_called){
           }
           if(jobs[i].done){
             std::cout << "  Done                 " << jobs[i].command << "\n";
+            std::cout << "Was the job done" << std::endl;
           }else{
             std::cout << "  Running                 " << jobs[i].command << " &\n";
           }
