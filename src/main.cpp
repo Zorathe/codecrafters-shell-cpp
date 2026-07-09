@@ -521,7 +521,7 @@ int main() {
     }else if(wordcollector[0] == "jobs"){
       reap_jobs();
       print_jobs();
-      cleanup_jobs();
+      //cleanup_jobs();
       // for(auto &job: jobs){
       //   int status;
       //   pid_t ret = waitpid(job.pid, &status, WNOHANG);
