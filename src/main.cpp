@@ -555,7 +555,7 @@ int main() {
         exit(127);
       }else if(pid > 0){
         if(run_in_back){
-          int cur_id = 1;
+          int curr_id = 1;
           if(!jobs.empty()){
             int max_id = 0;
             for(const auto &job: jobs){
