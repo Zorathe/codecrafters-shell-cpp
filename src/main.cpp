@@ -299,32 +299,32 @@ void reap_jobs(bool explicitly_called){
     //std::vector<int> remove_list;
     
 
-    for(auto& job : jobs){
-      if(job.running){
+    for(int i = 0; i < jobs.size(); i++){
+      if(jobs[i].running){
         int status;
-        pid_t ret = waitpid(job.id, &status, WNOHANG);
+        pid_t ret = waitpid(jobs[i].id, &status, WNOHANG);
         
         if(ret > 0 && (WIFEXITED(status) || WIFSIGNALED(status))){
           auto [last, second_last] = get_marks();
-          job.done = true;
-          job.running = false;
+          jobs[i].done = true;
+          jobs[i].running = false;
         }
       }
 
         if(explicitly_called || job.done){
-          std::cout << "[" << job.id << "]";
+          std::cout << "[" << jobs[i].id << "]";
           
-          if(job.id == jobs.size()-1){
+          if(i == jobs.size()-1){
             std::cout << "+";
-          }else if(job.id == jobs.size()-2){
+          }else if(i == jobs.size()-2){
             std::cout << "-";
           }
-          if(job.done){
-            std::cout << "  Done                 " << job.command << "\n";
+          if(jobs[i].done){
+            std::cout << "  Done                 " << jobs[i].command << "\n";
           }else{
-            std::cout << "  Running                 " << job.command << " &\n";
-    }
+            std::cout << "  Running                 " << jobs[i].command << " &\n";
           }
+        }
     }
 
 
