@@ -320,9 +320,9 @@ void reap_jobs(bool explicitly_called){
             std::cout << "-";
           }
           if(job.done){
-            std::cout << "  Done                 " << jobs[i].command << "\n";
+            std::cout << "  Done                 " << job.command << "\n";
           }else{
-            std::cout << "  Running                 " << jobs[i].command << " &\n";
+            std::cout << "  Running                 " << job.command << " &\n";
     }
           }
     }
