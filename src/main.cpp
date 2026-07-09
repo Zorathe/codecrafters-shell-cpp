@@ -302,7 +302,7 @@ void reap_jobs(){
     for(auto& job : jobs){
       if(job.running){
         int status;
-        pid_t ret = waitpid(it->pid, &status, WNOHANG);
+        pid_t ret = waitpid(jobpid, &status, WNOHANG);
         
         if(ret > 0 && (WIFEXITED(status) || WIFSIGNALED(status))){
           auto [last, second_last] = get_marks();
