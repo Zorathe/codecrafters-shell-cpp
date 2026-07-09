@@ -319,7 +319,11 @@ void reap_jobs(bool explicitly_called){
           }else if(job.id == jobs.size()-2){
             std::cout << "-";
           }
-            std::cout << "  Done                 " << job.command << "\n";
+          if(jobs[i].done){
+            std::cout << "  Done                 " << jobs[i].command << "\n";
+          }else{
+            std::cout << "  Running                 " << jobs[i].command << " &\n";
+    }
           }
     }
 
