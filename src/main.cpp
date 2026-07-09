@@ -282,6 +282,64 @@ void reap_jobs(bool explicitly_called){
     }
 }
 
+void stdouterr(const vector<std::string>& token){
+
+  //std::string out, err;
+  //bool isOut, isErr;
+  std::vector<std::string> cmd;
+  std::string file;
+
+  int file_desc;
+  for(int i = 0; i< token.size(); i++){
+    if(token[i] == ">>" || token[i] == "1>>" || token[i] == "2>>"){
+      file = token[i+1];
+      file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
+    }else if(token[i] == ">" || token[i] == "1>" || token[i] == "2>"){
+      file = token[i+1];
+      file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    }else{
+      cmd.push_back(token[i]);
+    }
+    if(file_desc == -1){
+      perror("open");
+      exit(1);
+    }
+    close(file_desc);
+  }
+  
+    // int file_desc;
+    // if(redirect_type == ">>" || redirect_type == "1>>" || redirect_type == "2>>"){
+    //   file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
+    // }else{
+    //   file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    // }
+    //   if(file_desc == -1){
+    //     perror("open");
+    //     exit(1);
+    //   }
+    // if(redirect_type == "2>" || redirect_type == "2>>"){
+    //     if(dup2(file_desc, STDERR_FILENO) == -1){
+    //       perror("dup2");
+    //       exit(1);
+    //     }
+    // }else if(dup2(file_desc, STDOUT_FILENO) == -1){
+    //     perror("dup2");
+    //     exit(1);
+    // }
+    
+    //close(file_desc);
+  //}
+  std::vector<char*> c_args;
+  for(auto &a : cmd){
+    c_args.push_back(const_cast<char*>(a.c_str()));
+  }
+  c_args.push_back(nullptr);
+  execvp(c_args[0], c_args.data());
+  std::cerr << c_args[0] << ": command not found\n";
+  exit(127);
+}
+
+
 int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
@@ -446,34 +504,135 @@ int main() {
         c_args.push_back(const_cast<char*>(a.c_str()));
       }
       c_args.push_back(nullptr);
-      pid_t pid = fork();
-      if(pid == 0){
-        if(redirect){
-        int file_desc;
-        if(redirect_type == ">>" || redirect_type == "1>>" || redirect_type == "2>>"){
-          file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
-        }else{
-          file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        }
-          if(file_desc == -1){
-            perror("open");
-            exit(1);
-          }
-        if(redirect_type == "2>" || redirect_type == "2>>"){
-            if(dup2(file_desc, STDERR_FILENO) == -1){
-              perror("dup2");
-              exit(1);
-            }
-          }else if(dup2(file_desc, STDOUT_FILENO) == -1){
-            perror("dup2");
-            exit(1);
-          }
+      
 
-          close(file_desc);
+      auto pipp_it = find(wordcollector.begin(),wordcollector.end(), "|");
+      if(pipe_it != wordcollector.end()){
+        std::vector<std::string> parent(wordcollector.begin(), pipe_it);
+        std::vector<std::string> child(pipe_it + 1, wordcollector.end());
+        int pipefd[2];
+        if(pipe(pipefd) == -1){
+          perror("pipe");
+          continue;
         }
-        execvp(c_args[0], c_args.data());
-        std::cerr << c_args[0] << ": command not found\n";
-        exit(127);
+
+        pid_t pid = fork();
+        if(pid == 0){
+          close(pipefd[0]);
+          dup2(pipfd[1], STDOUT_FILENO);
+          close(pipefd[1]);
+          stdouterr(parent);
+        //   if(redirect){
+        //   int file_desc;
+        //   if(redirect_type == ">>" || redirect_type == "1>>" || redirect_type == "2>>"){
+        //     file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
+        //   }else{
+        //     file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        //   }
+        //     if(file_desc == -1){
+        //       perror("open");
+        //       exit(1);
+        //     }
+        //   if(redirect_type == "2>" || redirect_type == "2>>"){
+        //       if(dup2(file_desc, STDERR_FILENO) == -1){
+        //         perror("dup2");
+        //         exit(1);
+        //       }
+        //     }else if(dup2(file_desc, STDOUT_FILENO) == -1){
+        //       perror("dup2");
+        //       exit(1);
+        //     }
+
+        //     close(file_desc);
+        //   }
+        //   execvp(c_args[0], c_args.data());
+        //   std::cerr << c_args[0] << ": command not found\n";
+        //   exit(127);
+        // }
+
+
+        pid_t pid2 = fork();
+        if(pid2 == 0){
+          close(pipefd[1]);
+          dup2(pipfd[0], STDOUT_FILENO);
+          close(pipefd[1]);
+          stdouterr(child);
+        }
+
+        close(pipefd[0]);
+        close(pipefd[1]);
+        waitpid(pid1, nullptr, 0);
+        waitpid(pid2, nullptr, 0);
+        //   if(redirect){
+        //   int file_desc;
+        //   if(redirect_type == ">>" || redirect_type == "1>>" || redirect_type == "2>>"){
+        //     file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
+        //   }else{
+        //     file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        //   }
+        //     if(file_desc == -1){
+        //       perror("open");
+        //       exit(1);
+        //     }
+        //   if(redirect_type == "2>" || redirect_type == "2>>"){
+        //       if(dup2(file_desc, STDERR_FILENO) == -1){
+        //         perror("dup2");
+        //         exit(1);
+        //       }
+        //     }else if(dup2(file_desc, STDOUT_FILENO) == -1){
+        //       perror("dup2");
+        //       exit(1);
+        //     }
+
+        //     close(file_desc);
+        //   }
+        //   execvp(c_args[0], c_args.data());
+        //   std::cerr << c_args[0] << ": command not found\n";
+        //   exit(127);
+        // }
+      
+      }else{
+        pid_t pid = fork();
+        if(pid == 0){
+          stdouterr(wordcollector);
+          //run process node
+        // if(pid == 0){
+        //   close(pipefd[1]);
+        //   dup2(pipfd[0], STDOUT_FILENO);
+        //   close(pipefd[1]);
+        //   if(redirect){
+        //   int file_desc;
+        //   if(redirect_type == ">>" || redirect_type == "1>>" || redirect_type == "2>>"){
+        //     file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_APPEND, 0600);
+        //   }else{
+        //     file_desc = open(file.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        //   }
+        //     if(file_desc == -1){
+        //       perror("open");
+        //       exit(1);
+        //     }
+        //   if(redirect_type == "2>" || redirect_type == "2>>"){
+        //       if(dup2(file_desc, STDERR_FILENO) == -1){
+        //         perror("dup2");
+        //         exit(1);
+        //       }
+        //     }else if(dup2(file_desc, STDOUT_FILENO) == -1){
+        //       perror("dup2");
+        //       exit(1);
+        //     }
+
+        //     close(file_desc);
+        //   }
+        //   execvp(c_args[0], c_args.data());
+        //   std::cerr << c_args[0] << ": command not found\n";
+        //   exit(127);
+        // }
+        // }else{
+        //   waitpid(pid,nullptr, 0);
+        // }
+        }else{
+          waitpid(pid, nullptr, 0);
+        }  
       }else if(pid > 0){
         if(run_in_back){
           int curr_id = 1;
