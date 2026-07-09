@@ -263,11 +263,11 @@ void reap_jobs(bool explicitly_called){
 
     //std::vector<int> remove_list;
     
-
-    for(int i = 0; i < jobs.size(); i++){
       int temp = 0;
       if(temp >= 2)
       std::cout << "job size: " << jobs.size() << std::endl;
+    for(int i = 0; i < jobs.size(); i++){
+
       if(jobs[i].running){
         if(temp > 0)
         std::cout << "was start runnn" << std::endl;
