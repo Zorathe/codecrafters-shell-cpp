@@ -299,37 +299,28 @@ void reap_jobs(){
     //std::vector<int> remove_list;
     
 
-    for(auto it = jobs.begin(); it != jobs.end();){
-      if(it->done){
-        it = jobs.erase(it);
-        continue;
-      }
+    for(auto& job : jobs){
+      if(job.running){
 
       int status;
       pid_t ret = waitpid(it->pid, &status, WNOHANG);
 
-      if(ret == it->pid && (WIFEXITED(status) || WIFSIGNALED(status))){
+      if(ret > 0 && (WIFEXITED(status) || WIFSIGNALED(status))){
         auto [last, second_last] = get_marks();
+        job.done = true;
+        job.running = false;
+      }
 
-        it->done = true;
-        it->running = false;
 
-        std::cout << "[" << it->id << "]";
+        std::cout << "[" << job.id << "]";
         
-        if(it->id == last){
+        if(job.id == last){
           std::cout << "+";
-        }else if(it->id == second_last){
+        }else if(job.id == second_last){
           std::cout << "-";
         }
-          std::cout << "  Done                 " << it->command << "\n";
-          it = jobs.erase(it);
-          ++it;
-      }else if(ret == -1 && errno == ECHILD){
-        //it = jobs.erase(it);
-        ++it;
-      }else{
-        ++it;
-      }
+          std::cout << "  Done                 " << job.command << "\n";
+          
     }
 
 
@@ -369,7 +360,7 @@ int main() {
   rl_attempted_completion_function = my_completion;
   rl_bind_key('\t', rl_complete);
   while(true){
-    //reap_jobs();
+    reap_jobs();
   
     char* line = readline("$ " );
     if(!line) break;
