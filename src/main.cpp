@@ -241,51 +241,19 @@ char **my_completion(const char *text, int start, int end){
   return rl_completion_matches(text,script_generator);
 }
 
-void cleanup_jobs(){
-  jobs.erase(std::remove_if(jobs.begin(), jobs.end(), [](const Job &j) {return j.done;}), jobs.end());
-}
-
-// void update_jobs(){
-//   for(auto &job: jobs){
-//     if(job.done){
-//       continue;
-//     }
-//     int status;
-//     pid_t ret = waitpid(job.pid, &status, WNOHANG);
-
-//     if(ret == job.pid){
-//       job.done = true;
-//     }
-//   }
-// }
-
 void reap_jobs(bool explicitly_called){
 
-    //std::vector<int> remove_list;
-    
-      int temp = 0;
-      //if(temp >= 2)
-      //std::cout << "job size: " << jobs.size() << std::endl;
     for(int i = 0; i < jobs.size(); i++){
-
       if(jobs[i].running){
-
         int status;
         pid_t ret = waitpid(jobs[i].pid, &status, WNOHANG);
-        //        if(temp > 1)
-        //std::cout << "was start runnn" << ret << std::endl;
-        //temp++;
         if(ret > 0){
-        //std::cout << "was this run" << std::endl;
-
           if(WIFEXITED(status)){
           jobs[i].done = true;
-          //std::cout << "ret > 0 and WIFEXITED confirmed" << std::endl;
           jobs[i].running = false;
           }
         }
       }
-      temp++;
     }
 
     for(int i = 0; i < jobs.size(); i++){
@@ -313,33 +281,6 @@ void reap_jobs(bool explicitly_called){
         ++it;
       }
     }
-
-    // int last = -1;
-    // int second_last = -1;
-    // for(int i = 0; i < jobs.size();i++){
-    //   if(!jobs[i].done){
-    //     second_last = last;
-    //     last = i;
-    //   }
-    // }
-
-    // for(int i = 0; i < jobs.size();i++){
-    //   if(jobs[i].done){
-    //     std::cout << "[" << jobs[i].id << "]";
-    //     if(i == last){
-    //       std::cout << "+";
-    //     }else if(i == second_last){
-    //       std::cout << "-";
-    //     }
-
-    //     std::cout << "  Done                 " << jobs[i].command << "\n";
-    //     remove_list.push_back(i);
-    //   }
-    // }
-
-    // for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
-    //   jobs.erase(jobs.begin() + *it);
-    // }
 }
 
 int main() {
@@ -500,38 +441,6 @@ int main() {
       }
     }else if(wordcollector[0] == "jobs"){
       reap_jobs(true);
-      //cleanup_jobs();
-      // for(auto &job: jobs){
-      //   int status;
-      //   pid_t ret = waitpid(job.pid, &status, WNOHANG);
-
-      //   if(ret == job.pid && (WIFEXITED(status) || WIFSIGNALED(status))){
-      //     job.done = true;
-      //   }else if(ret == -1){
-      //     job.done = true;
-      //   }
-      // }
-      //std::vector<int> remove_list;
-      //update_jobs();
-      // for(int i = 0; i < jobs.size(); i++){
-      //   std::cout << "[" << jobs[i].id << "]";
-      //   if(i == jobs.size()-1){
-      //     std::cout << "+";
-      //   }else if(i == jobs.size()-2){
-      //     std::cout << "-";
-      //   }
-      //   if(jobs[i].done){
-      //     std::cout << "  Done                 " << jobs[i].command << "\n";
-      //   //   remove_list.push_back(i);
-      //   }else{
-      //     std::cout << "  Running                 " << jobs[i].command << " &\n";
-      //   }
-      // }
-
-      // for(auto it = remove_list.rbegin(); it != remove_list.rend(); it++){
-      //   jobs.erase(jobs.begin() + *it);
-      // }
-
     }else{
       std::vector<char*> c_args;
       for(auto &a : wordcollector){
