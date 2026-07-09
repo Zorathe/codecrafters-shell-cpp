@@ -274,6 +274,7 @@ void reap_jobs(bool explicitly_called){
           std::cout << "ret > 0 and WIFEXITED confirmed" << std::endl;
           jobs[i].running = false;
         }
+        std::cout << "was this run" << std::endl;
       }
     }
 
